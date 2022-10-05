@@ -14,8 +14,11 @@ ___
 
 ## There are 5 major sections to complete as follows:
 ___
-## Create account
+1. ## Create account
 - create a new account or account already exists and go to home screen
 - configure hours when you sleep &amp; hours when you dont want the app to schedule you <span style="color:red;"><ins>"freetime"</ins></span>
 - Confirmation screen when you finish configuring new account.
 ![WireframeMakeAcct](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeMakeAcct.png)
+
+2. ## Homescreen + Schedule navigator
+![WireframeMainNav](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeMakeAcct.png)
