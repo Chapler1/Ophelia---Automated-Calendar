@@ -88,12 +88,20 @@ ___
 - Need to be able to get one project/task individually and find all other scheduled events on those days
   - this is (allEvents - freetime - sleep) for the set of days given by the scheduled days of the specific project/task
 
-### conclusions 
+### considerations 
 - The user should probably have some kind of calender object of events. freetime and sleep should not be planned into it
 - A project also def needs a class
   - the project class has a list of times and days that are scheduled
+- the system needs a list of all days including freetime and sleep in order to schedule
+  - should this exist or just be programatically done in a method of the user. probably the latter
+- could have a global calendar object per user that expresses the set of all days and you schedule events onto the global calendar this calendar ignores sleep and "freeTime"
+  - this is redundant no? days can be plotted out into a calendar.
+- to view the schedule suggestion generated for a given projectX
+  -  `list projectX = project.getListOfTimes()`Union`list otherThings = projectX.forEach(projectSessionDateTime => User.getEventsAtDay(projectSessionDateTime)`
+    - what if we wanted to subtract the other projects from this view 
+      -  `list projectX = project.getListOfTimes()`Union `list otherThings = projectX.forEach(projectSessionDateTime => User.getFixedEvents(projectSessionDateTime)`
 
-## 1. User Object
+## 1. Object structures + reasoning
 - User
   - static user information
     - Gmail
@@ -102,20 +110,25 @@ ___
   - Projects list of projects each project is basically a DateTime list
   - list of events possibly/likely multiple per day that express freeTime when you dont want to be scheduled. this is an event list but the events have no names and stuff.
   - imported google calendar events list.
-- ... other stuff ...
-  
+- ... other stuff ... 
+
+  - there might be a problem with organizing it with many different lists. 
+    - if we need to find all information from one specific date event if its a tree then its N_lists * log(n) the 'N' lists will be fixed(3 or 4) so itll still be O(log(n)) but it'll be worse
+    - solution is to keep a global list of google_calendar_events + all_projects which will be lit this will be called and be a class (nah imo) or it'll just be a generic list of events that will be a variable called calendar. 
+    - also keep individual lists.
+    - And if you want to show a view without other projects in it then you just search through the fixed event list(google cal imports) not the calendar. this will be fast nice.
+      - for expandability add the option to add more types of fixed events to plan around in the code. 
+        - for example reoccuring fixed events we wont implement it but how can we make a nice space for it.
+        - but how would you then get all of the fixed events independently. reoccuring and single time imports.???????
+          - when you would add a reoccuring event it would iterate out into all days and times in a given year it would be scheduled for and it would add its generic event to the calendar
 - Project
   - ???
 
 - Event
   - ???
 
-- the system needs a list of all days including freetime and sleep in order to schedule
-  - should this exist or just be programatically done in a method of the user. probably the latter
-- could have a global calendar object per user that expresses the set of all days and you schedule events onto the global calendar this calendar ignores sleep and "freeTime"
-  - this is redundant no? days can be plotted out into a calendar.
-
-
+### all info below is not super relevant but theres some good stuff
+___
 - User information
   - Gmail
   - User_id
