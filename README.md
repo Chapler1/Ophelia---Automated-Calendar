@@ -59,16 +59,25 @@ ___
 ![WireframeSettings](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeSettings.png)
 ___
 # Discussing project structure
+- you need to be able to get a list of all projects/tasts scheduled by the system: 
+  - this is Events minus freetime minus sleep minus google calender events
+- need to be able to get a week in a month and each event/task scheduled by the system as well as google calender imported tasks
+  - this is (Events - freetime - sleep) within a given week
+- need to be able to get each day and all events assoicated with that day
+  - this is also (Events - freetime - sleep) for a given day.
+
+- The user should probably have some kind of calender object of events. freetime and sleep should not be planned into it
+
 ## 1. User Object
 - User information
   - Gmail
   - User_id
 - Events
-  - Events planned by the system
+  - Events planned by the system (these have a specific day in the year and specific time)
   - Static events (Describe times a user cant be planned)
-    - imported google calender events
-    - sleep time
-    - free time
+    - imported google calender events (these have a specific day in the year and specific time)
+    - sleep time (this is one time for all days)
+    - free time (this is 7 times for each day for all days in a year)
   - Alternatively
     - Events planned by the system (occur randomly around static events and system events)
     - Static events (Describe times a user cant be planned)
