@@ -38,6 +38,7 @@ ___
 ![WireframeViewTask](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeViewTask.png)
 
 ## 4. Create new project/task
+- maybe: before setting new events be prompted to resync with google calenders this will avoid schedule conflits before they happen.
 - Collect user information about their event to schedule. 
 - Generate and show possible schedules within given paremeters
 - Show individual schedules on single press possibly implement a calendar view as well.
@@ -56,3 +57,34 @@ ___
 - Some kind of mission statement
 - Logout
 ![WireframeSettings](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeSettings.png)
+___
+# Discussing project structure
+## 1. User Object
+- User information
+  - Gmail
+  - User_id
+- Events
+  - Events planned by the system
+  - Static events (Describe times a user cant be planned)
+    - imported google calender events
+    - sleep time
+    - free time
+  - Alternatively
+    - Events planned by the system (occur randomly around static events and system events)
+    - Static events (Describe times a user cant be planned)
+      - imported google calender events (occur randomly)
+    - System events
+      - sleep time (reoccuring each day consistently)
+      - free time. (reoccuring each week consistently)
+## 1. Alternate User Object
+- User information:
+  - Gmail
+  - User_id
+  - sleep time (simple bounds of time 00:00am-00:00pm) dont stick this into events class its a pretty global thing.
+- Events
+    - Events planned by the system (occur randomly around static events and system events)
+    - Static events (Describe times a user cant be planned)
+      - imported google calender events (occur randomly)
+    - System events
+      - sleep time (reoccuring each day consistently)
+      - free time. (reoccuring each week consistently)
