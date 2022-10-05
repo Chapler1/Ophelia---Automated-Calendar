@@ -10,4 +10,11 @@ ___
 - Red arrows are screen that link back to the Home Screen usually after finishing completing an action
 - Green arrows link back and fourth between the Home Screen 
 - Black arrows are always "local" one screen jump
-![Whole wireframe](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeAll.png)
+![WireframeAll](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeAll.png)
+
+## There are 5 major sections to complete as follows:
+___
+## Create account
+- create a new account or account already exists and go to home screen
+- configure hours when you sleep &amp; hours when you dont want the app to schedule you <span color="red">"freetime"</span>
+![WireframeMakeAcct](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeMakeAcct.png)
