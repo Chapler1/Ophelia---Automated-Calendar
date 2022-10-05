@@ -6,4 +6,10 @@ ___
 - <h1><a href="https://docs.google.com/presentation/d/1nmNfW_MpaunoF-vFupPI1xJbjUCSXYqzJROpoPPIT4M/edit#slide=id.p">Deliverable 1</a></h1>
   - Detailed personals and storyboard for planning screens and app functionality
 ___
-## Implementation sections
+## Wireframe
+- Red arrows are screen that link back to the Home Screen usually after finishing completing an action
+- Green arrows link back and fourth between the Home Screen 
+- Black arrows are always "local" one screen jump
+____
+![Whole wireframe](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeAll.png)
+
