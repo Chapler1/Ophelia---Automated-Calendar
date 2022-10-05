@@ -7,3 +7,4 @@ ___
   - Detailed personals and storyboard for planning screens and app functionality
 ___
 ## Implementation sections
+![This is an image](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeAll.png)
