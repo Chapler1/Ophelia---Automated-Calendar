@@ -59,14 +59,17 @@ ___
 ![WireframeSettings](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeSettings.png)
 ___
 # Discussing project structure
+
+### Requirements of the system
 - you need to be able to get a list of all projects/tasts scheduled by the system: 
   - this is Events minus freetime minus sleep minus google calender events
 - need to be able to get a week in a month and each event/task scheduled by the system as well as google calender imported tasks
   - this is (Events - freetime - sleep) within a given week
 - need to be able to get each day and all events assoicated with that day
   - this is also (Events - freetime - sleep) for a given day.
-
+### conclusions 
 - The user should probably have some kind of calender object of events. freetime and sleep should not be planned into it
+- A project also def needs a class
 
 ## 1. User Object
 - User information
