@@ -68,16 +68,19 @@ ___
 - Turn on/off all notifications and timers
 - Some kind of mission statement
 - Logout
-![WireframeSettings](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeSettings.png)
-___
-# Discussing project structure
-### lets say we implement automatic google calender syncing
+
+- lets say we implement automatic google calender sync:
 -  this is a solution to some problems
    -  but what if a user schedules an event during another event through google calender and then comes back to the app. 
       -  how will the system know that this happened?
       -  how will will it react.
          -  one option is to prompt reschedule - too much work
          -  make the event 15 minutes after the event it has a conflict with - this is good but we should tell the user it was rescheduled
+![WireframeSettings](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeSettings.png)
+___
+# Discussing project structure
+
+
 ### Requirements of the system
 - you need to be able to get a list of all projects/tasts scheduled by the system: 
   - this is Events minus freetime minus sleep minus google calender events
