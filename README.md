@@ -82,7 +82,7 @@ ___
 
 
 ### Requirements of the system
-- you need to be able to get a list of all projects/tasts scheduled by the system: 
+- you need to be able to get a list of all projects/tasks scheduled by the system: 
   - this is Events minus freetime minus sleep minus google calender events
 - need to be able to get a week in a month and each event/task scheduled by the system as well as google calender imported tasks
   - this is (Events - freetime - sleep) within a given week
@@ -123,6 +123,8 @@ ___
       - for expandability add the option to add more types of fixed events to plan around in the code. 
         - for example reoccuring fixed events we wont implement it but how can we make a nice space for it.
         - but how would you then get all of the fixed events independently. reoccuring and single time imports.???????
+          - how do you encorporate reoccuring events without making a new class for them
+            - when you initilize them split them up into a bunch of different fixed events and stick them into the list with the googlecalendar imports
           - when you would add a reoccuring event it would iterate out into all days and times in a given year it would be scheduled for and it would add its generic event to the calendar
 - Project
   - ???
