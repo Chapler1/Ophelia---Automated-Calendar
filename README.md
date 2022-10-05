@@ -24,6 +24,7 @@ ___
 ## 1.  Create account
 - Create a new account or account already exists and go to home screen
 - Configure hours when you sleep &amp; hours when you dont want the app to schedule your <span style="color:red">*"freetime"*</span>
+  - Drag between times to set times you do not want to be scheduled for projects in a per hour view of an entire generic week from monday-sunday
 - Confirmation screen when you finish configuring new account.
 ![WireframeMakeAcct](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeMakeAcct.png)
 
@@ -34,16 +35,27 @@ ___
 ![WireframeMainNav](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeMainNav.png)
 
 ## 3. View project/task
+- the main view of scheduled events in this screen should very similar to the generated schedule -> pick schedule view
+  - i.e. - the request of class should be the same 
+  -( `list projectX = project.getListOfTimes()`Union `list otherThings = projectX.forEach(projectSessionDateTime => User.calendar.get(projectSessionDateTime)`) == set of times on this screen.
 - View single task and configure project settings
+- should this view be able to show everything thats happening on each individual day with a project scheduled or should it just show the times of each scheduled session
+  - what if there are two sessions scheduled for one day?
+- include other long term events/projects in this view or only imported google calendar events?
 ![WireframeViewTask](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeViewTask.png)
 
 ## 4. Create new project/task
-- maybe: before setting new events be prompted to resync with google calenders this will avoid schedule conflits before they happen.
 - Collect user information about their event to schedule. 
 - Generate and show possible schedules within given paremeters
 - Show individual schedules on single press possibly implement a calendar view as well.
   - Show confirmation on single press of 'set' button cancel button goes back to home screen
     - cancel button could possibly prompt to add this configuration to a list of unscheduled tasks that are acessable from settings to be planned later.
+- Maybe?
+  - maybe: before setting new events be prompted to resync with google calenders this will avoid schedule conflits before they happen. but it may mess up an existing one :/
+  - Maybe add the option to add a link to a git repo or canvas or something
+  - Maybe add the option checkbox to schedule on weekends (override free time)
+  - Represent schedule with relative size of 7 rectangles representing relative time per day scheduled. 
+  - What if no schedules could be make?
 ![WireframeMakeTask](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeMakeTask.png)
 
 ## 5. Settings
@@ -59,7 +71,13 @@ ___
 ![WireframeSettings](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeSettings.png)
 ___
 # Discussing project structure
-
+### lets say we implement automatic google calender syncing
+-  this is a solution to some problems
+   -  but what if a user schedules an event during another event through google calender and then comes back to the app. 
+      -  how will the system know that this happened?
+      -  how will will it react.
+         -  one option is to prompt reschedule - too much work
+         -  make the event 15 minutes after the event it has a conflict with - this is good but we should tell the user it was rescheduled
 ### Requirements of the system
 - you need to be able to get a list of all projects/tasts scheduled by the system: 
   - this is Events minus freetime minus sleep minus google calender events
@@ -67,11 +85,37 @@ ___
   - this is (Events - freetime - sleep) within a given week
 - need to be able to get each day and all events assoicated with that day
   - this is also (Events - freetime - sleep) for a given day.
+- Need to be able to get one project/task individually and find all other scheduled events on those days
+  - this is (allEvents - freetime - sleep) for the set of days given by the scheduled days of the specific project/task
+
 ### conclusions 
 - The user should probably have some kind of calender object of events. freetime and sleep should not be planned into it
 - A project also def needs a class
+  - the project class has a list of times and days that are scheduled
 
 ## 1. User Object
+- User
+  - static user information
+    - Gmail
+    - User_id
+    - One dateless time object that expresses a range of time that the user is sleeping.
+  - Projects list of projects each project is basically a DateTime list
+  - list of events possibly/likely multiple per day that express freeTime when you dont want to be scheduled. this is an event list but the events have no names and stuff.
+  - imported google calendar events list.
+- ... other stuff ...
+  
+- Project
+  - ???
+
+- Event
+  - ???
+
+- the system needs a list of all days including freetime and sleep in order to schedule
+  - should this exist or just be programatically done in a method of the user. probably the latter
+- could have a global calendar object per user that expresses the set of all days and you schedule events onto the global calendar this calendar ignores sleep and "freeTime"
+  - this is redundant no? days can be plotted out into a calendar.
+
+
 - User information
   - Gmail
   - User_id
