@@ -78,7 +78,7 @@ ___
          -  make the event 15 minutes after the event it has a conflict with - this is good but we should tell the user it was rescheduled
 ![WireframeSettings](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeSettings.png)
 ___
-# Del 3 stuff
+# Del 2 stuff
 ## Discussing project structure
 
 
