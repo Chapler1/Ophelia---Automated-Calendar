@@ -78,7 +78,8 @@ ___
          -  make the event 15 minutes after the event it has a conflict with - this is good but we should tell the user it was rescheduled
 ![WireframeSettings](https://github.com/Sean-Shmulevich/Ophelia/blob/main/.images/WireframeSettings.png)
 ___
-# Discussing project structure
+# Del 3 stuff
+## Discussing project structure
 
 
 ### Requirements of the system
@@ -103,6 +104,27 @@ ___
   -  `list projectX = project.getListOfTimes()`Union`list otherThings = projectX.forEach(projectSessionDateTime => User.getEventsAtDay(projectSessionDateTime)`
     - what if we wanted to subtract the other projects from this view 
       -  `list projectX = project.getListOfTimes()`Union `list otherThings = projectX.forEach(projectSessionDateTime => User.getFixedEvents(projectSessionDateTime)`
+
+## General overall structure
+- user object 
+  - projectList = \[project1, project2\]
+    - each project is a list of `n` dateTime events planned by the system
+  - calenderEventlist = project list + allGeneric events(in this case just google calendar)
+    - every iteration of a day with stuff on it.
+  - freeTime = \[list of dayTime events\] list of 7 days. 7 arrays filled with time objects representing free time spans.
+  - static user information.
+  - timeObject sleep time
+- Events
+  - timeSpan can be an event?
+  - dateTime object subclass? - fixed events and project/task planned events.
+  - timeWeek object ?
+
+- Events could also be
+  - (timeObject) 0:00-15:00 
+      - time object is a bad name it should be time span and time object is its own thing.
+  - (dayOfWeek + timeObject) 0:00-15:00, Monday
+  - (date + timeObject) 0:00-15:00, 04/07/2001;
+  - 
 
 ## 1. Object structures + reasoning
 - User
