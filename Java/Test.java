@@ -12,14 +12,15 @@ abstract class Day
 {
     int numFreeHours = 24;
     Date date;
-    ArrayList<Project> projectList = new ArrayList<Project>();//list of projects scheduled for that day. 
-    ArrayList<Event> importedEvents = new ArrayList<Event>();//list of all imported events on that day
-
+    ArrayList<Event> projectList = new ArrayList<Event>();//list of projects scheduled for that day. 
+    //could also be list of other things.
+    //you would have to know what project 
 }
 
 interface Event {
     //when the imported events events are init they are mapped to their days.
     //  it doesnt need a date bc it will be mapped to a day. 
+    String name;
     int getStartTime();
     int getEndTime();
     int getTimeDelta();
@@ -51,8 +52,6 @@ class ImportedEvents implements Event{
 }
 
 class Project  {
-    int startTime;
-    int endTime;
     String projectName;
     String projectNotes;
     //user input options...
