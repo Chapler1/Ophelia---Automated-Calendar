@@ -29,6 +29,54 @@ class MyApp extends StatelessWidget {
   }
 }
 
+class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const MyAppBar({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.center,
+      
+      child: FractionallySizedBox(
+        widthFactor: 0.5,
+        heightFactor: 0.5,
+        
+        child: Container(
+          alignment: Alignment.center,
+         decoration: BoxDecoration(color:Colors.amber[600],border: Border.all(width:5, color: Colors.blueAccent)),
+          // we can set width here with conditions
+          child: Stack(
+            children: [
+              Text(
+                "Ophelia",
+                style: TextStyle(
+                  fontSize: 20,
+                  foreground: Paint()
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 6
+                    ..color = Colors.blue[700]!,
+                ),
+              ),
+              // Solid text as fill.
+              Text(
+                'Ophelia',
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.grey[300],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  ///width doesnt matter
+  @override
+  Size get preferredSize => Size(100, kToolbarHeight+20);
+}
+
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
@@ -42,8 +90,6 @@ class MyHomePage extends StatefulWidget {
   // always marked "final".
 
   final String title;
-
-  
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -71,15 +117,11 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-    
-    return Scaffold(
 
-      
-      appBar: AppBar(
-        title: const Text('AppBar Demo'),
-      ),
+    return Scaffold(
+      extendBodyBehindAppBar: true,
+      appBar: MyAppBar(),
       body: Center(
-        
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: Column(
@@ -106,16 +148,15 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            Container( 
-              color: Colors.blue, 
-              height: 100, 
-              width: 100, 
-            ), 
+            Container(
+              color: Colors.blue,
+              height: 100,
+              width: 100,
+            ),
           ],
         ),
       ),
 
-      
       floatingActionButton: FloatingActionButton(
         onPressed: _incrementCounter,
         tooltip: 'Increment',
