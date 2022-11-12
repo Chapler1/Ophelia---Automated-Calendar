@@ -29,52 +29,107 @@ class MyApp extends StatelessWidget {
   }
 }
 
+//extending the app bar basically a flexbox with stuff in it
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   const MyAppBar({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.center,
-      
-      child: FractionallySizedBox(
-        widthFactor: 0.5,
-        heightFactor: 0.5,
-        
-        child: Container(
-          alignment: Alignment.center,
-         decoration: BoxDecoration(color:Colors.amber[600],border: Border.all(width:5, color: Colors.blueAccent)),
-          // we can set width here with conditions
-          child: Stack(
-            children: [
-              Text(
-                "Ophelia",
-                style: TextStyle(
-                  fontSize: 20,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 6
-                    ..color = Colors.blue[700]!,
-                ),
-              ),
-              // Solid text as fill.
-              Text(
-                'Ophelia',
-                style: TextStyle(
-                  fontSize: 20,
-                  color: Colors.grey[300],
-                ),
-              ),
-            ],
+    return SafeArea(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            margin: const EdgeInsets.only(left: 20.0),
+            child: const Icon(
+              IconData(0xf363, fontFamily: 'MaterialIcons'),
+              color: Color.fromARGB(255, 6, 46, 107),
+              size: 40.0,
+              semanticLabel: 'Text to announce in accessibility modes',
+            ),
           ),
-        ),
+          Spacer(),
+          Container(
+            width: 125,
+            height: 40,
+            alignment: Alignment.center,
+            decoration: (BoxDecoration(
+                border: Border.all(
+                  color: Color.fromARGB(255, 6, 46, 107),
+                  width: 2.5,
+                ),
+                color: Colors.yellow[800],
+                borderRadius: BorderRadius.circular(15))),
+
+            // we can set width here with conditions
+            // var height = MediaQuery.of(context).viewPadding.top;
+            child: TitleText(),
+          ),
+          Spacer(),
+          Container(
+            margin: const EdgeInsets.only(right: 20.0),
+            child: const Icon(
+              IconData(0xf527, fontFamily: 'MaterialIcons'),
+              color: Color.fromARGB(255, 6, 46, 107),
+              size: 40.0,
+              semanticLabel: 'Text to announce in accessibility modes',
+            ),
+          ),
+        ],
       ),
     );
   }
 
   ///width doesnt matter
   @override
-  Size get preferredSize => Size(100, kToolbarHeight+20);
+  Size get preferredSize => Size(100, kToolbarHeight);
+}
+
+//Outlined text effect styles
+class TitleText extends StatelessWidget {
+  const TitleText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Text(
+          "Ophelia",
+          style: TextStyle(
+            fontSize: 20,
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 6
+              ..color = Color.fromARGB(255, 6, 46, 107),
+          ),
+        ),
+        // Solid text as fill.
+        Text(
+          "Ophelia",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.grey[300],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class Main extends StatefulWidget {
+  const Main({Key? key}) : super(key: key);
+
+  @override
+  _MainState createState() => _MainState();
+}
+
+class _MainState extends State<Main> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
 }
 
 class MyHomePage extends StatefulWidget {
@@ -120,6 +175,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
+      backgroundColor: Colors.blue,
       appBar: MyAppBar(),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -141,6 +197,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
+            Spacer(),
             const Text(
               'You have pressed the button this many times:',
             ),
@@ -148,20 +205,101 @@ class _MyHomePageState extends State<MyHomePage> {
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
             ),
-            Container(
-              color: Colors.blue,
-              height: 100,
-              width: 100,
+            Spacer(),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: SafeArea(
+                child: projectList(),
+              ),
             ),
           ],
         ),
       ),
-
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  /*
+    projectList() - Project Container positioned to bottom of the screen
+    Container with a list view of list items inside of it.
+  */
+
+  FractionallySizedBox projectList() {
+    return FractionallySizedBox(
+      widthFactor: 1,
+      child: Container(
+        height: 180,
+        decoration: BoxDecoration(
+          border: const Border(
+            top:
+                BorderSide(width: 10.0, color: Color.fromARGB(255, 6, 46, 107)),
+          ),
+          color: Colors.blue[600],
+        ),
+        child: ListView(
+          padding: const EdgeInsets.only(top: 20),
+          children: const <Widget>[
+            ProjListItem(),
+            ProjListItem(),
+            ProjListItem(),
+            ProjListItem(),
+            ProjListItem(),
+            ProjListItem(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/*
+    ProjListItem() - List item that represents a project.
+    Fractionally sizing list items to 90% of the space in the outter projectList() container
+    Putting it into a container to display it
+    Aligning the text center on both axis within the list item.
+  */
+class ProjListItem extends StatelessWidget {
+  const ProjListItem({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      widthFactor: .9,
+      child: Container(
+        decoration: Shadows(Colors.blue[200]),
+        margin: const EdgeInsets.only(bottom: 20),
+        height: 38,
+        child: const Align(
+          alignment: Alignment.center,
+          child: Text(
+            "Ophelia",
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// BOX shadows styles
+BoxDecoration Shadows(color) {
+  return BoxDecoration(
+      color: color,
+      borderRadius: BorderRadius.circular(50),
+      boxShadow: const [
+        // Shadow for top-left corner
+        BoxShadow(
+          color: Color.fromARGB(255, 0, 65, 162),
+          offset: Offset(10, 10),
+          blurRadius: 6,
+          spreadRadius: 1,
+        ),
+        // Shadow for bottom-right corner
+        BoxShadow(
+          color: Colors.white12,
+          offset: Offset(-10, -10),
+          blurRadius: 6,
+          spreadRadius: 1,
+        ),
+      ]);
 }
