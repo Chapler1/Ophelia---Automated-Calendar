@@ -1,8 +1,54 @@
 import 'package:flutter/material.dart';
+import 'package:table_calendar/table_calendar.dart';
+import 'package:go_router/go_router.dart';
 
 void main() {
   runApp(const MyApp());
 }
+
+//RPC routing instead of REST
+//REST: is resource oriented routes
+// Returning data is in JSON format and requests we are using are PUT, DELETE, POST, and GET
+//RPC: is functional routes very data-centric
+//it consists of allowing client code to call a piece of server code as if it was local.
+//I chose this because it will make the routing less nested.
+
+//How to routes get resources? from the user object reference
+//make it accessible to all paths somehow?
+//the issue with this is that all the data is in the app at once some of it should be on the server.
+//all paths have the user ID
+//they send fetch requests to the server with their current path
+final GoRouter _router = GoRouter(
+  routes: <GoRoute>[
+    GoRoute(
+      path: '/',
+      builder: (BuildContext context, GoRouterState state) =>
+          const MyHomePage(title: 'Flutter Demo Page'),
+      routes: <GoRoute>[
+        GoRoute(
+          path: 'projectInput',
+          builder: (BuildContext context, GoRouterState state) =>
+              const ProjectInput(),
+        ),
+        GoRoute(
+          path: 'generateSchedules',
+          builder: (BuildContext context, GoRouterState state) =>
+              const ProjectInput(),
+        ),
+        GoRoute(
+          path: 'weekView',
+          builder: (BuildContext context, GoRouterState state) =>
+              const ProjectInput(),
+        ),
+        GoRoute(
+          path: 'settings',
+          builder: (BuildContext context, GoRouterState state) =>
+              const Settings(),
+        ),
+      ],
+    ),
+  ],
+);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -10,7 +56,8 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MaterialApp.router(
+      routerConfig: _router,
       title: 'Flutter Demo',
       theme: ThemeData(
         // This is the theme of your application.
@@ -24,9 +71,41 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Page'),
+      // home: const MyHomePage(title: 'Flutter Demo Page'),
     );
   }
+}
+
+class Main extends StatefulWidget {
+  const Main({Key? key}) : super(key: key);
+
+  @override
+  _MainState createState() => _MainState();
+}
+
+class _MainState extends State<Main> {
+  @override
+  Widget build(BuildContext context) {
+    return Container();
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key, required this.title});
+
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
+  final String title;
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
 }
 
 //extending the app bar basically a flexbox with stuff in it
@@ -39,42 +118,59 @@ class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
         children: [
-          Container(
-            margin: const EdgeInsets.only(left: 20.0),
-            child: const Icon(
-              IconData(0xf363, fontFamily: 'MaterialIcons'),
-              color: Color.fromARGB(255, 6, 46, 107),
-              size: 40.0,
-              semanticLabel: 'Text to announce in accessibility modes',
+          InkWell(
+            //Route to go to settings empty for now
+            onTap: () {
+              context.go('/settings');
+            },
+            child: Container(
+              margin: const EdgeInsets.only(left: 20.0),
+              child: const Icon(
+                IconData(0xf363, fontFamily: 'MaterialIcons'),
+                color: Color.fromARGB(255, 6, 46, 107),
+                size: 40.0,
+                semanticLabel: 'Text to announce in accessibility modes',
+              ),
             ),
           ),
           Spacer(),
-          Container(
-            width: 125,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: (BoxDecoration(
-                border: Border.all(
-                  color: Color.fromARGB(255, 6, 46, 107),
-                  width: 2.5,
-                ),
-                color: Colors.yellow[800],
-                borderRadius: BorderRadius.circular(15))),
+          InkWell(
+            onTap: () {
+              context.go('/');
+            },
+            child: Container(
+              width: 125,
+              height: 40,
+              alignment: Alignment.center,
+              decoration: (BoxDecoration(
+                  border: Border.all(
+                    color: Color.fromARGB(255, 6, 46, 107),
+                    width: 2.5,
+                  ),
+                  color: Colors.yellow[800],
+                  borderRadius: BorderRadius.circular(15))),
 
-            // we can set width here with conditions
-            // var height = MediaQuery.of(context).viewPadding.top;
-            child: TitleText(),
-          ),
-          Spacer(),
-          Container(
-            margin: const EdgeInsets.only(right: 20.0),
-            child: const Icon(
-              IconData(0xf527, fontFamily: 'MaterialIcons'),
-              color: Color.fromARGB(255, 6, 46, 107),
-              size: 40.0,
-              semanticLabel: 'Text to announce in accessibility modes',
+              // we can set width here with conditions
+              // var height = MediaQuery.of(context).viewPadding.top;
+              child: TitleText(),
             ),
           ),
+          Spacer(),
+          InkWell(
+            //route to create new project input form
+            onTap: () {
+              context.go('/projectInput');
+            },
+            child: Container(
+              margin: const EdgeInsets.only(right: 20.0),
+              child: const Icon(
+                IconData(0xf527, fontFamily: 'MaterialIcons'),
+                color: Color.fromARGB(255, 6, 46, 107),
+                size: 40.0,
+                semanticLabel: 'Text to announce in accessibility modes',
+              ),
+            ),
+          ), //wrapper that allows me to add an 'onTap()'
         ],
       ),
     );
@@ -118,40 +214,11 @@ class TitleText extends StatelessWidget {
   }
 }
 
-class Main extends StatefulWidget {
-  const Main({Key? key}) : super(key: key);
-
-  @override
-  _MainState createState() => _MainState();
-}
-
-class _MainState extends State<Main> {
-  @override
-  Widget build(BuildContext context) {
-    return Container();
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  CalendarFormat _calendarFormat = CalendarFormat.month;
+  DateTime _focusedDay = DateTime.now();
+  DateTime? _selectedDay;
 
   void _incrementCounter() {
     setState(() {
@@ -175,7 +242,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     return Scaffold(
       extendBodyBehindAppBar: true,
-      backgroundColor: Colors.blue,
+      backgroundColor: Colors.blue[600],
       appBar: MyAppBar(),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
@@ -198,14 +265,46 @@ class _MyHomePageState extends State<MyHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Spacer(),
-            const Text(
-              'You have pressed the button this many times:',
+            Container(
+              margin: const EdgeInsets.only(top: 25),
+              color: Colors.blue[100],
+              child: TableCalendar(
+                firstDay: DateTime.utc(2010, 10, 16),
+                lastDay: DateTime.utc(2030, 3, 14),
+                focusedDay: _focusedDay,
+                calendarFormat: _calendarFormat,
+                selectedDayPredicate: (day) {
+                  // Use `selectedDayPredicate` to determine which day is currently selected.
+                  // If this returns true, then `day` will be marked as selected.
+
+                  // Using `isSameDay` is recommended to disregard
+                  // the time-part of compared DateTime objects.
+                  return isSameDay(_selectedDay, day);
+                },
+                onDaySelected: (selectedDay, focusedDay) {
+                  if (!isSameDay(_selectedDay, selectedDay)) {
+                    // Call `setState()` when updating the selected day
+                    setState(() {
+                      _selectedDay = selectedDay;
+                      _focusedDay = focusedDay;
+                    });
+                  }
+                },
+                onFormatChanged: (format) {
+                  if (_calendarFormat != format) {
+                    // Call `setState()` when updating calendar format
+                    setState(() {
+                      _calendarFormat = format;
+                    });
+                  }
+                },
+                onPageChanged: (focusedDay) {
+                  // No need to call `setState()` here
+                  _focusedDay = focusedDay;
+                },
+              ),
             ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
-            Spacer(),
+            //optional makes the calender more to the top of the screen Spacer(),
             Align(
               alignment: Alignment.bottomCenter,
               child: SafeArea(
@@ -226,26 +325,29 @@ class _MyHomePageState extends State<MyHomePage> {
   FractionallySizedBox projectList() {
     return FractionallySizedBox(
       widthFactor: 1,
-      child: Container(
-        height: 180,
-        decoration: BoxDecoration(
-          border: const Border(
-            top:
-                BorderSide(width: 10.0, color: Color.fromARGB(255, 6, 46, 107)),
+      child: Column(
+        children: [
+          const Text(
+            textAlign: TextAlign.center,
+            "Welcome user you have 5 projects scheduled for this week",
           ),
-          color: Colors.blue[600],
-        ),
-        child: ListView(
-          padding: const EdgeInsets.only(top: 20),
-          children: const <Widget>[
-            ProjListItem(),
-            ProjListItem(),
-            ProjListItem(),
-            ProjListItem(),
-            ProjListItem(),
-            ProjListItem(),
-          ],
-        ),
+          Container(
+            height: 180,
+            decoration: BoxDecoration(
+              color: Colors.blue[600],
+            ),
+            child: ListView(
+              padding: const EdgeInsets.only(top: 20),
+              children: const <Widget>[
+                ProjListItem(),
+                ProjListItem(),
+                ProjListItem(),
+                ProjListItem(),
+                ProjListItem(),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -302,4 +404,46 @@ BoxDecoration Shadows(color) {
           spreadRadius: 1,
         ),
       ]);
+}
+
+class ProjectInput extends StatelessWidget {
+  /// Creates a [Page1Screen].
+  const ProjectInput({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: MyAppBar(),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () => context.go('/'),
+                child: const Text('OPE user input text page'),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
+class Settings extends StatelessWidget {
+  /// Creates a [Page1Screen].
+  const Settings({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: MyAppBar(),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () => context.go('/'),
+                child: const Text('UNDER CONSTRUCTION SETTINGS PAGE'),
+              ),
+            ],
+          ),
+        ),
+      );
 }
