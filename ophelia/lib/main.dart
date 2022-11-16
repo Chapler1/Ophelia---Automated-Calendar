@@ -38,7 +38,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'weekView',
           builder: (BuildContext context, GoRouterState state) =>
-              const ProjectInput(),
+              const WeekView(),
         ),
         GoRoute(
           path: 'settings',
@@ -304,6 +304,37 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
+            Spacer(),
+            InkWell(
+              onTap: () {
+                context.go('/weekview');
+              },
+              child: Container(
+                width: 120,
+                height: 33,
+                alignment: Alignment.center,
+                decoration: (BoxDecoration(
+                    border: Border.all(
+                      color: Color.fromARGB(255, 6, 46, 107),
+                      width: 2.5,
+                    ),
+                    color: Color.fromARGB(255, 255, 255, 255),
+                    borderRadius: BorderRadius.circular(15))),
+
+                // we can set width here with conditions
+                // var height = MediaQuery.of(context).viewPadding.top;
+                child: Text(
+                  'Week View',
+                  style: TextStyle(
+                    fontSize: 20,
+                    foreground: Paint()
+                      ..style = PaintingStyle.stroke
+                      ..strokeWidth = 2
+                      ..color = Color.fromARGB(255, 6, 46, 107),
+                  ),
+                ),
+              ),
+            ),
             //optional makes the calender more to the top of the screen Spacer(),
             Align(
               alignment: Alignment.bottomCenter,
@@ -406,6 +437,27 @@ BoxDecoration Shadows(color) {
       ]);
 }
 
+class Settings extends StatelessWidget {
+  /// Creates a [Page1Screen].
+  const Settings({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) => Scaffold(
+        appBar: MyAppBar(),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              ElevatedButton(
+                onPressed: () => context.go('/'),
+                child: const Text('UNDER CONSTRUCTION SETTINGS PAGE'),
+              ),
+            ],
+          ),
+        ),
+      );
+}
+
 class ProjectInput extends StatelessWidget {
   /// Creates a [Page1Screen].
   const ProjectInput({Key? key}) : super(key: key);
@@ -427,23 +479,96 @@ class ProjectInput extends StatelessWidget {
       );
 }
 
-class Settings extends StatelessWidget {
+//Week view page
+class WeekView extends StatelessWidget {
   /// Creates a [Page1Screen].
-  const Settings({Key? key}) : super(key: key);
+  const WeekView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: MyAppBar(),
         body: Center(
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              ElevatedButton(
-                onPressed: () => context.go('/'),
-                child: const Text('UNDER CONSTRUCTION SETTINGS PAGE'),
+              Text(
+                'Week View',
+                style: TextStyle(
+                  fontSize: 30,
+                  foreground: Paint()
+                    ..style = PaintingStyle.stroke
+                    ..strokeWidth = 2
+                    ..color = Color.fromARGB(255, 6, 46, 107),
+                ),
+              ),
+              Expanded(
+                child: ListView(
+                  padding: const EdgeInsets.only(top: 20),
+                  children: const <Widget>[
+                    DailyEventList(),
+                    DailyEventList(),
+                    DailyEventList(),
+                    DailyEventList(),
+                    DailyEventList(),
+                    DailyEventList(),
+                    DailyEventList(),
+                  ],
+                ),
               ),
             ],
           ),
         ),
       );
+}
+
+//Widget for list of days with their events
+class DailyEventList extends StatelessWidget {
+  const DailyEventList({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: <Widget>[
+      Text('Day'),
+      FractionallySizedBox(
+        widthFactor: .9,
+        child: Container(
+          decoration: Shadows(Colors.blue[200]),
+          margin: const EdgeInsets.only(bottom: 20),
+          height: 60,
+          child: Align(
+            alignment: Alignment.center,
+            child: ListView(
+              scrollDirection: Axis.horizontal,
+              padding: const EdgeInsets.all(8),
+              children: const <Widget>[Event(), Event(), Event()],
+            ),
+          ),
+        ),
+      )
+    ]);
+  }
+}
+
+//Week view event widget (listed in a day)
+class Event extends StatelessWidget {
+  const Event({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: const EdgeInsets.only(left: 20),
+      color: Color.fromARGB(255, 255, 255, 255),
+      width: 100,
+      height: 50,
+      child: const Align(
+        alignment: Alignment.center,
+        child: Text(
+          'Event',
+        ),
+      ),
+    );
+  }
 }
