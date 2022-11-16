@@ -5,6 +5,8 @@ import 'planProject.dart';
 import 'myappbar.dart';
 import 'weekView.dart';
 import 'settings.dart';
+import 'http_service.dart';
+import 'package:http/http.dart' as http;
 
 void main() {
   runApp(const MyApp());
@@ -47,7 +49,7 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'settings',
           builder: (BuildContext context, GoRouterState state) =>
-              const Settings(),
+              const Settings(title: "hello world"),
         ),
       ],
     ),
@@ -118,6 +120,14 @@ class _MyHomePageState extends State<MyHomePage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
+  late Future<String> myData;
+
+  @override
+  void initState() {
+    super.initState();
+    myData = fetchNames();
+  }
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -145,102 +155,104 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Spacer(),
-            Container(
-              margin: const EdgeInsets.only(top: 25),
-              color: Colors.blue[100],
-              child: TableCalendar(
-                firstDay: DateTime.utc(2010, 10, 16),
-                lastDay: DateTime.utc(2030, 3, 14),
-                focusedDay: _focusedDay,
-                calendarFormat: _calendarFormat,
-                selectedDayPredicate: (day) {
-                  // Use `selectedDayPredicate` to determine which day is currently selected.
-                  // If this returns true, then `day` will be marked as selected.
+        child: SafeArea(
+          child: Column(
+            // Column is also a layout widget. It takes a list of children and
+            // arranges them vertically. By default, it sizes itself to fit its
+            // children horizontally, and tries to be as tall as its parent.
+            //
+            // Invoke "debug painting" (press "p" in the console, choose the
+            // "Toggle Debug Paint" action from the Flutter Inspector in Android
+            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+            // to see the wireframe for each widget.
+            //
+            // Column has various properties to control how it sizes itself and
+            // how it positions its children. Here we use mainAxisAlignment to
+            // center the children vertically; the main axis here is the vertical
+            // axis because Columns are vertical (the cross axis would be
+            // horizontal).
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.only(top: 25),
+                color: Colors.blue[100],
+                child: TableCalendar(
+                  firstDay: DateTime.utc(2010, 10, 16),
+                  lastDay: DateTime.utc(2030, 3, 14),
+                  focusedDay: _focusedDay,
+                  calendarFormat: _calendarFormat,
+                  selectedDayPredicate: (day) {
+                    // Use `selectedDayPredicate` to determine which day is currently selected.
+                    // If this returns true, then `day` will be marked as selected.
 
-                  // Using `isSameDay` is recommended to disregard
-                  // the time-part of compared DateTime objects.
-                  return isSameDay(_selectedDay, day);
-                },
-                onDaySelected: (selectedDay, focusedDay) {
-                  if (!isSameDay(_selectedDay, selectedDay)) {
-                    // Call `setState()` when updating the selected day
-                    setState(() {
-                      _selectedDay = selectedDay;
-                      _focusedDay = focusedDay;
-                    });
-                  }
-                },
-                onFormatChanged: (format) {
-                  if (_calendarFormat != format) {
-                    // Call `setState()` when updating calendar format
-                    setState(() {
-                      _calendarFormat = format;
-                    });
-                  }
-                },
-                onPageChanged: (focusedDay) {
-                  // No need to call `setState()` here
-                  _focusedDay = focusedDay;
-                },
+                    // Using `isSameDay` is recommended to disregard
+                    // the time-part of compared DateTime objects.
+                    return isSameDay(_selectedDay, day);
+                  },
+                  onDaySelected: (selectedDay, focusedDay) {
+                    if (!isSameDay(_selectedDay, selectedDay)) {
+                      // Call `setState()` when updating the selected day
+                      setState(() {
+                        _selectedDay = selectedDay;
+                        _focusedDay = focusedDay;
+                      });
+                    }
+                  },
+                  onFormatChanged: (format) {
+                    if (_calendarFormat != format) {
+                      // Call `setState()` when updating calendar format
+                      setState(() {
+                        _calendarFormat = format;
+                      });
+                    }
+                  },
+                  onPageChanged: (focusedDay) {
+                    // No need to call `setState()` here
+                    _focusedDay = focusedDay;
+                  },
+                ),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                context.go('/weekview');
-              },
-              child: Container(
-                //this makes the width expand.
-                width: double.infinity,
-                height: 33,
-                alignment: Alignment.center,
-                decoration: (BoxDecoration(
-                    border: Border.all(
-                      color: Color.fromARGB(255, 6, 46, 107),
-                      width: 2.5,
-                    ),
-                    color: Color.fromARGB(255, 255, 255, 255),
-                    borderRadius: BorderRadius.circular(15))),
+              Spacer(),
+              TextButton(
+                onPressed: () {
+                  context.go('/weekview');
+                },
+                child: Container(
+                  //this makes the width expand.
+                  width: double.infinity,
+                  height: 33,
+                  alignment: Alignment.center,
+                  decoration: (BoxDecoration(
+                      border: Border.all(
+                        color: Color.fromARGB(255, 6, 46, 107),
+                        width: 2.5,
+                      ),
+                      color: Color.fromARGB(255, 255, 255, 255),
+                      borderRadius: BorderRadius.circular(15))),
 
-                // we can set width here with conditions
-                // var height = MediaQuery.of(context).viewPadding.top;
-                child: Text(
-                  'Week View',
-                  style: TextStyle(
-                    fontSize: 20,
-                    foreground: Paint()
-                      ..style = PaintingStyle.stroke
-                      ..strokeWidth = 2
-                      ..color = Color.fromARGB(255, 6, 46, 107),
+                  // we can set width here with conditions
+                  // var height = MediaQuery.of(context).viewPadding.top;
+                  child: Text(
+                    'Week View',
+                    style: TextStyle(
+                      fontSize: 20,
+                      foreground: Paint()
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 2
+                        ..color = Color.fromARGB(255, 6, 46, 107),
+                    ),
                   ),
                 ),
               ),
-            ),
-            //optional makes the calender more to the top of the screen Spacer(),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: SafeArea(
-                child: projectList(),
+              //optional makes the calender more to the top of the screen Spacer(),
+              Align(
+                alignment: Alignment.bottomCenter,
+                child: SafeArea(
+                  child: projectList(myData),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -250,8 +262,22 @@ class _MyHomePageState extends State<MyHomePage> {
     projectList() - Project Container positioned to bottom of the screen
     Container with a list view of list items inside of it.
   */
+  Future<String> fetchNames() async {
+    final response =
+        await http.get(Uri.parse('http://192.168.86.35:8080/getProjectNames'));
 
-  FractionallySizedBox projectList() {
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON.
+      return ((response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load album');
+    }
+  }
+
+  FractionallySizedBox projectList(myData) {
     return FractionallySizedBox(
       widthFactor: 1,
       child: Column(
@@ -259,6 +285,20 @@ class _MyHomePageState extends State<MyHomePage> {
           const Text(
             textAlign: TextAlign.center,
             "Welcome user you have 5 projects scheduled for this week",
+          ),
+          FutureBuilder<String>(
+            future: myData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                print(snapshot.data!);
+                return Text(snapshot.data!);
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
           ),
           Container(
             height: 180,
