@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:go_router/go_router.dart';
+import 'planProject.dart';
+import 'myappbar.dart';
+import 'weekView.dart';
+import 'settings.dart';
 
 void main() {
   runApp(const MyApp());
@@ -108,112 +112,6 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-//extending the app bar basically a flexbox with stuff in it
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const MyAppBar({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          InkWell(
-            //Route to go to settings empty for now
-            onTap: () {
-              context.go('/settings');
-            },
-            child: Container(
-              margin: const EdgeInsets.only(left: 20.0),
-              child: const Icon(
-                IconData(0xf363, fontFamily: 'MaterialIcons'),
-                color: Color.fromARGB(255, 6, 46, 107),
-                size: 40.0,
-                semanticLabel: 'Text to announce in accessibility modes',
-              ),
-            ),
-          ),
-          Spacer(),
-          InkWell(
-            onTap: () {
-              context.go('/');
-            },
-            child: Container(
-              width: 125,
-              height: 40,
-              alignment: Alignment.center,
-              decoration: (BoxDecoration(
-                  border: Border.all(
-                    color: Color.fromARGB(255, 6, 46, 107),
-                    width: 2.5,
-                  ),
-                  color: Colors.yellow[800],
-                  borderRadius: BorderRadius.circular(15))),
-
-              // we can set width here with conditions
-              // var height = MediaQuery.of(context).viewPadding.top;
-              child: TitleText(),
-            ),
-          ),
-          Spacer(),
-          InkWell(
-            //route to create new project input form
-            onTap: () {
-              context.go('/projectInput');
-            },
-            child: Container(
-              margin: const EdgeInsets.only(right: 20.0),
-              child: const Icon(
-                IconData(0xf527, fontFamily: 'MaterialIcons'),
-                color: Color.fromARGB(255, 6, 46, 107),
-                size: 40.0,
-                semanticLabel: 'Text to announce in accessibility modes',
-              ),
-            ),
-          ), //wrapper that allows me to add an 'onTap()'
-        ],
-      ),
-    );
-  }
-
-  ///width doesnt matter
-  @override
-  Size get preferredSize => Size(100, kToolbarHeight);
-}
-
-//Outlined text effect styles
-class TitleText extends StatelessWidget {
-  const TitleText({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Text(
-          "Ophelia",
-          style: TextStyle(
-            fontSize: 20,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 6
-              ..color = Color.fromARGB(255, 6, 46, 107),
-          ),
-        ),
-        // Solid text as fill.
-        Text(
-          "Ophelia",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.grey[300],
-          ),
-        ),
-      ],
-    );
-  }
-}
-
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
   CalendarFormat _calendarFormat = CalendarFormat.month;
@@ -304,13 +202,13 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
-            Spacer(),
-            InkWell(
-              onTap: () {
+            TextButton(
+              onPressed: () {
                 context.go('/weekview');
               },
               child: Container(
-                width: 120,
+                //this makes the width expand.
+                width: double.infinity,
                 height: 33,
                 alignment: Alignment.center,
                 decoration: (BoxDecoration(
@@ -435,140 +333,4 @@ BoxDecoration Shadows(color) {
           spreadRadius: 1,
         ),
       ]);
-}
-
-class Settings extends StatelessWidget {
-  /// Creates a [Page1Screen].
-  const Settings({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: MyAppBar(),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () => context.go('/'),
-                child: const Text('UNDER CONSTRUCTION SETTINGS PAGE'),
-              ),
-            ],
-          ),
-        ),
-      );
-}
-
-class ProjectInput extends StatelessWidget {
-  /// Creates a [Page1Screen].
-  const ProjectInput({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: MyAppBar(),
-        body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () => context.go('/'),
-                child: const Text('OPE user input text page'),
-              ),
-            ],
-          ),
-        ),
-      );
-}
-
-//Week view page
-class WeekView extends StatelessWidget {
-  /// Creates a [Page1Screen].
-  const WeekView({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) => Scaffold(
-        appBar: MyAppBar(),
-        body: Center(
-          child: Column(
-            children: <Widget>[
-              Text(
-                'Week View',
-                style: TextStyle(
-                  fontSize: 30,
-                  foreground: Paint()
-                    ..style = PaintingStyle.stroke
-                    ..strokeWidth = 2
-                    ..color = Color.fromARGB(255, 6, 46, 107),
-                ),
-              ),
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.only(top: 20),
-                  children: const <Widget>[
-                    DailyEventList(),
-                    DailyEventList(),
-                    DailyEventList(),
-                    DailyEventList(),
-                    DailyEventList(),
-                    DailyEventList(),
-                    DailyEventList(),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-}
-
-//Widget for list of days with their events
-class DailyEventList extends StatelessWidget {
-  const DailyEventList({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(children: <Widget>[
-      Text('Day'),
-      FractionallySizedBox(
-        widthFactor: .9,
-        child: Container(
-          decoration: Shadows(Colors.blue[200]),
-          margin: const EdgeInsets.only(bottom: 20),
-          height: 60,
-          child: Align(
-            alignment: Alignment.center,
-            child: ListView(
-              scrollDirection: Axis.horizontal,
-              padding: const EdgeInsets.all(8),
-              children: const <Widget>[Event(), Event(), Event()],
-            ),
-          ),
-        ),
-      )
-    ]);
-  }
-}
-
-//Week view event widget (listed in a day)
-class Event extends StatelessWidget {
-  const Event({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.only(left: 20),
-      color: Color.fromARGB(255, 255, 255, 255),
-      width: 100,
-      height: 50,
-      child: const Align(
-        alignment: Alignment.center,
-        child: Text(
-          'Event',
-        ),
-      ),
-    );
-  }
 }
