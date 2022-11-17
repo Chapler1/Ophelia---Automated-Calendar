@@ -2,15 +2,49 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:go_router/go_router.dart';
 import 'planProject.dart';
-import 'myappbar.dart';
 import 'weekView.dart';
 import 'settings.dart';
+import "generateSchedules.dart";
+import 'myappbar.dart';
 import 'http_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
+}
+
+//Outlined text effect styles
+class TitleText extends StatelessWidget {
+  const TitleText({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        Text(
+          "Ophelia",
+          style: TextStyle(
+            fontSize: 20,
+            foreground: Paint()
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 6
+              ..color = Color.fromARGB(255, 6, 46, 107),
+          ),
+        ),
+        // Solid text as fill.
+        Text(
+          "Ophelia",
+          style: TextStyle(
+            fontSize: 20,
+            color: Colors.grey[300],
+          ),
+        ),
+      ],
+    );
+  }
 }
 
 //RPC routing instead of REST
@@ -35,12 +69,12 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'projectInput',
           builder: (BuildContext context, GoRouterState state) =>
-              const ProjectInput(),
+              ProjectInput(),
         ),
         GoRoute(
           path: 'generateSchedules',
           builder: (BuildContext context, GoRouterState state) =>
-              const ProjectInput(),
+              const GenerateSchedules(),
         ),
         GoRoute(
           path: 'weekView',
@@ -100,15 +134,6 @@ class _MainState extends State<Main> {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
-  // This widget is the home page of your application. It is stateful, meaning
-  // that it has a State object (defined below) that contains fields that affect
-  // how it looks.
-
-  // This class is the configuration for the state. It holds the values (in this
-  // case the title) provided by the parent (in this case the App widget) and
-  // used by the build method of the State. Fields in a Widget subclass are
-  // always marked "final".
-
   final String title;
 
   @override
@@ -150,26 +175,13 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.blue[600],
+      resizeToAvoidBottomInset: false,
       appBar: MyAppBar(),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: SafeArea(
           child: Column(
-            // Column is also a layout widget. It takes a list of children and
-            // arranges them vertically. By default, it sizes itself to fit its
-            // children horizontally, and tries to be as tall as its parent.
-            //
-            // Invoke "debug painting" (press "p" in the console, choose the
-            // "Toggle Debug Paint" action from the Flutter Inspector in Android
-            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-            // to see the wireframe for each widget.
-            //
-            // Column has various properties to control how it sizes itself and
-            // how it positions its children. Here we use mainAxisAlignment to
-            // center the children vertically; the main axis here is the vertical
-            // axis because Columns are vertical (the cross axis would be
-            // horizontal).
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
@@ -231,16 +243,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   // we can set width here with conditions
                   // var height = MediaQuery.of(context).viewPadding.top;
-                  child: Text(
-                    'Week View',
-                    style: TextStyle(
-                      fontSize: 20,
-                      foreground: Paint()
-                        ..style = PaintingStyle.stroke
-                        ..strokeWidth = 2
-                        ..color = Color.fromARGB(255, 6, 46, 107),
-                    ),
-                  ),
+                  child: Text('Week View'),
                 ),
               ),
               //optional makes the calender more to the top of the screen Spacer(),
