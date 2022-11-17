@@ -81,6 +81,9 @@ public class User {
         toReturn += "]";
         return toReturn;
     }
+    public ArrayList<Project> getProjectList() {
+        return projectList;
+    }
     public Calendar getCalendar() {
         return userCal;
     }
