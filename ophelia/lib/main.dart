@@ -8,7 +8,6 @@ import 'settings.dart';
 import 'http_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'utils.dart';
 import 'dart:collection';
 
 void main() {
