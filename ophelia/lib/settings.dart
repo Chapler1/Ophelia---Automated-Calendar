@@ -22,9 +22,9 @@ class Settings extends StatefulWidget {
   State<Settings> createState() => _SettingsState();
 }
 
-Future<String> fetchAlbum() async {
+Future<String> getAllProjects() async {
   final response =
-      await http.get(Uri.parse('http://192.168.86.35:8080/getFullProjecJson'));
+      await http.get(Uri.parse('http://192.168.86.35:8080/getFullProjectJson'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -44,34 +44,37 @@ class _SettingsState extends State<Settings> {
   @override
   void initState() {
     super.initState();
-    myData = fetchAlbum();
+    myData = getAllProjects();
   }
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: MyAppBar(),
         body: Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              ElevatedButton(
-                onPressed: () => context.go('/'),
-                child: const Text('UNDER CONSTRUCTION SETTINGS PAGE'),
-              ),
-              FutureBuilder<String>(
-                future: myData,
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return Text(snapshot.data!);
-                  } else if (snapshot.hasError) {
-                    return Text('${snapshot.error}');
-                  }
+          child: SafeArea(
+            child: ListView(
+              children: <Widget>[
+                ElevatedButton(
+                  onPressed: () => context.go('/'),
+                  child: const Text('UNDER CONSTRUCTION SETTINGS PAGE'),
+                ),
+                SingleChildScrollView(
+                  child: FutureBuilder<String>(
+                    future: myData,
+                    builder: (context, snapshot) {
+                      if (snapshot.hasData) {
+                        return Text(snapshot.data!);
+                      } else if (snapshot.hasError) {
+                        return Text('${snapshot.error}');
+                      }
 
-                  // By default, show a loading spinner.
-                  return const CircularProgressIndicator();
-                },
-              ),
-            ],
+                      // By default, show a loading spinner.
+                      return const CircularProgressIndicator();
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       );

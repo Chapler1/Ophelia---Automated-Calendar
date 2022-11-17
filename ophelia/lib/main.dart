@@ -7,6 +7,7 @@ import 'weekView.dart';
 import 'settings.dart';
 import 'http_service.dart';
 import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
@@ -115,7 +116,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -135,7 +135,6 @@ class _MyHomePageState extends State<MyHomePage> {
       // so that the display can reflect the updated values. If we changed
       // _counter without calling setState(), then the build method would not be
       // called again, and so nothing would appear to happen.
-      _counter++;
     });
   }
 
@@ -174,7 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
-                margin: const EdgeInsets.only(top: 25),
+                margin: const EdgeInsets.only(top: 90),
                 color: Colors.blue[100],
                 child: TableCalendar(
                   firstDay: DateTime.utc(2010, 10, 16),
@@ -264,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
   */
   Future<String> fetchNames() async {
     final response =
-        await http.get(Uri.parse('http://192.168.86.35:8080/getProjecNames'));
+        await http.get(Uri.parse('http://192.168.86.35:8080/getProjectNames'));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -279,6 +278,7 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   FractionallySizedBox projectList(myData) {
+    List<Widget> projListItemList = <Widget>[];
     return FractionallySizedBox(
       widthFactor: 1,
       child: Column(
@@ -291,8 +291,15 @@ class _MyHomePageState extends State<MyHomePage> {
             future: myData,
             builder: (context, snapshot) {
               if (snapshot.hasData) {
-                print(snapshot.data!);
-                return Text(snapshot.data!);
+                String data = snapshot.data!;
+                final List<dynamic> projectNameList = jsonDecode(data);
+                for (var i = 0; i < projectNameList.length; i++) {
+                  projListItemList.add(ProjListItem(
+                      (projectNameList[i])['$i'].toString() + "$i"));
+
+                  print(projectNameList[i]);
+                }
+                return projectButtons(projListItemList);
               } else if (snapshot.hasError) {
                 return Text('${snapshot.error}');
               }
@@ -301,23 +308,20 @@ class _MyHomePageState extends State<MyHomePage> {
               return const CircularProgressIndicator();
             },
           ),
-          Container(
-            height: 180,
-            decoration: BoxDecoration(
-              color: Colors.blue[600],
-            ),
-            child: ListView(
-              padding: const EdgeInsets.only(top: 20),
-              children: const <Widget>[
-                ProjListItem(),
-                ProjListItem(),
-                ProjListItem(),
-                ProjListItem(),
-                ProjListItem(),
-              ],
-            ),
-          ),
         ],
+      ),
+    );
+  }
+
+  Container projectButtons(List<Widget> projListItemList) {
+    return Container(
+      height: 180,
+      decoration: BoxDecoration(
+        color: Colors.blue[600],
+      ),
+      child: ListView(
+        padding: const EdgeInsets.only(top: 20),
+        children: projListItemList,
       ),
     );
   }
@@ -329,28 +333,22 @@ class _MyHomePageState extends State<MyHomePage> {
     Putting it into a container to display it
     Aligning the text center on both axis within the list item.
   */
-class ProjListItem extends StatelessWidget {
-  const ProjListItem({
-    Key? key,
-  }) : super(key: key);
 
-  @override
-  Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      widthFactor: .9,
-      child: Container(
-        decoration: Shadows(Colors.blue[200]),
-        margin: const EdgeInsets.only(bottom: 20),
-        height: 38,
-        child: const Align(
-          alignment: Alignment.center,
-          child: Text(
-            "Ophelia",
-          ),
+FractionallySizedBox ProjListItem(name) {
+  return FractionallySizedBox(
+    widthFactor: .9,
+    child: Container(
+      decoration: Shadows(Colors.blue[200]),
+      margin: const EdgeInsets.only(bottom: 20),
+      height: 38,
+      child: Align(
+        alignment: Alignment.center,
+        child: Text(
+          name,
         ),
       ),
-    );
-  }
+    ),
+  );
 }
 
 // BOX shadows styles
