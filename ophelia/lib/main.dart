@@ -2,49 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:go_router/go_router.dart';
 import 'planProject.dart';
+import 'myappbar.dart';
 import 'weekView.dart';
 import 'settings.dart';
-import "generateSchedules.dart";
-import 'myappbar.dart';
 import 'http_service.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'utils.dart';
+import 'dart:collection';
 
 void main() {
   runApp(const MyApp());
-}
-
-//Outlined text effect styles
-class TitleText extends StatelessWidget {
-  const TitleText({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Text(
-          "Ophelia",
-          style: TextStyle(
-            fontSize: 20,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 6
-              ..color = Color.fromARGB(255, 6, 46, 107),
-          ),
-        ),
-        // Solid text as fill.
-        Text(
-          "Ophelia",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.grey[300],
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 //RPC routing instead of REST
@@ -69,12 +37,12 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'projectInput',
           builder: (BuildContext context, GoRouterState state) =>
-              ProjectInput(),
+              const ProjectInput(),
         ),
         GoRoute(
           path: 'generateSchedules',
           builder: (BuildContext context, GoRouterState state) =>
-              const GenerateSchedules(),
+              const ProjectInput(),
         ),
         GoRoute(
           path: 'weekView',
@@ -90,6 +58,51 @@ final GoRouter _router = GoRouter(
     ),
   ],
 );
+
+class Event {
+  final String title;
+
+  const Event(this.title);
+
+  @override
+  String toString() => title;
+}
+
+/// Example events.
+///
+/// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
+final kEvents = LinkedHashMap<DateTime, List<Event>>(
+  equals: isSameDay,
+  hashCode: getHashCode,
+)..addAll(_kEventSource);
+
+final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
+    key: (item) => DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5),
+    value: (item) => List.generate(
+        item % 4 + 1, (index) => Event('Event $item | ${index + 1}')))
+  ..addAll({
+    kToday: [
+      Event('Today\'s Event 1'),
+      Event('Today\'s Event 2'),
+    ],
+  });
+
+int getHashCode(DateTime key) {
+  return key.day * 1000000 + key.month * 10000 + key.year;
+}
+
+/// Returns a list of [DateTime] objects from [first] to [last], inclusive.
+List<DateTime> daysInRange(DateTime first, DateTime last) {
+  final dayCount = last.difference(first).inDays + 1;
+  return List.generate(
+    dayCount,
+    (index) => DateTime.utc(first.year, first.month, first.day + index),
+  );
+}
+
+final kToday = DateTime.now();
+final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
+final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -134,6 +147,15 @@ class _MainState extends State<Main> {
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
 
+  // This widget is the home page of your application. It is stateful, meaning
+  // that it has a State object (defined below) that contains fields that affect
+  // how it looks.
+
+  // This class is the configuration for the state. It holds the values (in this
+  // case the title) provided by the parent (in this case the App widget) and
+  // used by the build method of the State. Fields in a Widget subclass are
+  // always marked "final".
+
   final String title;
 
   @override
@@ -141,6 +163,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -150,7 +173,21 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+
+    _selectedDay = _focusedDay;
+    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+
     myData = fetchNames();
+  }
+
+  @override
+  void dispose() {
+    _selectedEvents.dispose();
+    super.dispose();
+  }
+
+  List<Event> _getEventsForDay(DateTime day) {
+    return kEvents[day] ?? [];
   }
 
   void _incrementCounter() {
@@ -175,23 +212,37 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.blue[600],
-      resizeToAvoidBottomInset: false,
       appBar: MyAppBar(),
       body: Center(
         // Center is a layout widget. It takes a single child and positions it
         // in the middle of the parent.
         child: SafeArea(
           child: Column(
+            // Column is also a layout widget. It takes a list of children and
+            // arranges them vertically. By default, it sizes itself to fit its
+            // children horizontally, and tries to be as tall as its parent.
+            //
+            // Invoke "debug painting" (press "p" in the console, choose the
+            // "Toggle Debug Paint" action from the Flutter Inspector in Android
+            // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
+            // to see the wireframe for each widget.
+            //
+            // Column has various properties to control how it sizes itself and
+            // how it positions its children. Here we use mainAxisAlignment to
+            // center the children vertically; the main axis here is the vertical
+            // axis because Columns are vertical (the cross axis would be
+            // horizontal).
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
               Container(
                 margin: const EdgeInsets.only(top: 90),
                 color: Colors.blue[100],
-                child: TableCalendar(
+                child: TableCalendar<Event>(
                   firstDay: DateTime.utc(2010, 10, 16),
                   lastDay: DateTime.utc(2030, 3, 14),
                   focusedDay: _focusedDay,
                   calendarFormat: _calendarFormat,
+                  eventLoader: _getEventsForDay,
                   selectedDayPredicate: (day) {
                     // Use `selectedDayPredicate` to determine which day is currently selected.
                     // If this returns true, then `day` will be marked as selected.
@@ -207,6 +258,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         _selectedDay = selectedDay;
                         _focusedDay = focusedDay;
                       });
+                      _selectedEvents.value = _getEventsForDay(selectedDay);
                     }
                   },
                   onFormatChanged: (format) {
@@ -220,6 +272,34 @@ class _MyHomePageState extends State<MyHomePage> {
                   onPageChanged: (focusedDay) {
                     // No need to call `setState()` here
                     _focusedDay = focusedDay;
+                  },
+                ),
+              ),
+              Spacer(),
+              const SizedBox(height: 8.0),
+              Expanded(
+                child: ValueListenableBuilder<List<Event>>(
+                  valueListenable: _selectedEvents,
+                  builder: (context, value, _) {
+                    return ListView.builder(
+                      itemCount: value.length,
+                      itemBuilder: (context, index) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(
+                            horizontal: 12.0,
+                            vertical: 4.0,
+                          ),
+                          decoration: BoxDecoration(
+                            border: Border.all(),
+                            borderRadius: BorderRadius.circular(12.0),
+                          ),
+                          child: ListTile(
+                            onTap: () => print('${value[index]}'),
+                            title: Text('${value[index]}'),
+                          ),
+                        );
+                      },
+                    );
                   },
                 ),
               ),
@@ -243,12 +323,21 @@ class _MyHomePageState extends State<MyHomePage> {
 
                   // we can set width here with conditions
                   // var height = MediaQuery.of(context).viewPadding.top;
-                  child: Text('Week View'),
+                  child: Text(
+                    'Week View',
+                    style: TextStyle(
+                      fontSize: 20,
+                      foreground: Paint()
+                        ..style = PaintingStyle.stroke
+                        ..strokeWidth = 2
+                        ..color = Color.fromARGB(255, 6, 46, 107),
+                    ),
+                  ),
                 ),
               ),
               //optional makes the calender more to the top of the screen Spacer(),
               Align(
-                alignment: Alignment.bottomCenter,
+                alignment: Alignment.topCenter,
                 child: SafeArea(
                   child: projectList(myData),
                 ),
@@ -266,7 +355,7 @@ class _MyHomePageState extends State<MyHomePage> {
   */
   Future<String> fetchNames() async {
     final response =
-        await http.get(Uri.parse('http://71.182.194.216:8080/getProjectNames'));
+        await http.get(Uri.parse('http://192.168.86.35:8080/getProjectNames'));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -290,33 +379,29 @@ class _MyHomePageState extends State<MyHomePage> {
             textAlign: TextAlign.center,
             "Welcome user you have 5 projects scheduled for this week",
           ),
-          projectFuture(myData, projListItemList),
+          FutureBuilder<String>(
+            future: myData,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                String data = snapshot.data!;
+                final List<dynamic> projectNameList = jsonDecode(data);
+                for (var i = 0; i < projectNameList.length; i++) {
+                  projListItemList.add(ProjListItem(
+                      (projectNameList[i])['$i'].toString() + "$i"));
+
+                  print(projectNameList[i]);
+                }
+                return projectButtons(projListItemList);
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+
+              // By default, show a loading spinner.
+              return const CircularProgressIndicator();
+            },
+          ),
         ],
       ),
-    );
-  }
-
-  FutureBuilder<String> projectFuture(myData, List<Widget> projListItemList) {
-    return FutureBuilder<String>(
-      future: myData,
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          String data = snapshot.data!;
-          final List<dynamic> projectNameList = jsonDecode(data);
-          for (var i = 0; i < projectNameList.length; i++) {
-            projListItemList.add(
-                ProjListItem((projectNameList[i])['$i'].toString() + "$i"));
-
-            print(projectNameList[i]);
-          }
-          return projectButtons(projListItemList);
-        } else if (snapshot.hasError) {
-          return Text('${snapshot.error}');
-        }
-
-        // By default, show a loading spinner.
-        return const CircularProgressIndicator();
-      },
     );
   }
 
