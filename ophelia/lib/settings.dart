@@ -24,7 +24,7 @@ class Settings extends StatefulWidget {
 
 Future<String> fetchAlbum() async {
   final response =
-      await http.get(Uri.parse('http://192.168.86.35:8080/getFullProjectJson'));
+      await http.get(Uri.parse('http://192.168.86.35:8080/getFullProjecJson'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
@@ -33,7 +33,8 @@ Future<String> fetchAlbum() async {
   } else {
     // If the server did not return a 200 OK response,
     // then throw an exception.
-    throw Exception('Failed to load album');
+    // throw Exception('Failed to load album');
+    return "{API not connected probably}";
   }
 }
 

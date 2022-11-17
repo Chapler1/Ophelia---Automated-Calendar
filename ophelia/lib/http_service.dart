@@ -2,11 +2,11 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class HttpService {
-  final String stockURL = "http://192.168.86.35:8080/getFullProjectJson";
+  final String stockURL = "http://192.168.86.42:8080/getFullProjecJson";
 
   Future<String> fetchAlbum() async {
     final response = await http
-        .get(Uri.parse('http://192.168.86.35:8080/getFullProjectJson'));
+        .get(Uri.parse('http://192.168.86.42:8080/getFullProjecJson'));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,

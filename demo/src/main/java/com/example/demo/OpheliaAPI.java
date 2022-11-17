@@ -14,16 +14,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-public class GreetingController {
+public class OpheliaAPI {
 
     ArrayList<Project> projectList = new ArrayList<Project>();
     User exampleUser = new User();
-    private static final String template = "Hello, %s!";
-    private final AtomicLong counter = new AtomicLong();
 
     @CrossOrigin
     @GetMapping("/getProjectNames")
-    public JsonNode getPName() throws Exception/*json parse exception*/ {
+    public JsonNode getPName() throws Exception /*json parse exception*/ {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode projectJson = mapper.readTree(exampleUser.getProjectNames());
         return projectJson;
@@ -31,7 +29,7 @@ public class GreetingController {
 
     @CrossOrigin
     @GetMapping("/getFullProjectJson")
-    public JsonNode getProj() throws Exception/*json parse exception*/ {
+    public JsonNode getProj() throws Exception /*json parse exception*/ {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode projectJson = mapper.readTree(exampleUser.getFullProjectJson());
         return projectJson;

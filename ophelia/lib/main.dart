@@ -264,7 +264,7 @@ class _MyHomePageState extends State<MyHomePage> {
   */
   Future<String> fetchNames() async {
     final response =
-        await http.get(Uri.parse('http://192.168.86.35:8080/getProjectNames'));
+        await http.get(Uri.parse('http://192.168.86.35:8080/getProjecNames'));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -273,7 +273,8 @@ class _MyHomePageState extends State<MyHomePage> {
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
-      throw Exception('Failed to load album');
+      // throw Exception('Failed to load album');
+      return '{API not connected probably}';
     }
   }
 
