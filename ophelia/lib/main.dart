@@ -114,7 +114,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    myData = fetchNames();
+    myData = fetchNames(); //NOTE4
   }
 
   @override
@@ -232,8 +232,8 @@ class _MyHomePageState extends State<MyHomePage> {
     Container with a list view of list items inside of it.
   */
   Future<String> fetchNames() async {
-    final response =
-        await http.get(Uri.parse('http://71.182.194.216:8080/getProjectNames'));
+    final response = await http
+        .get(Uri.parse('http://71.182.194.216:8080/getProjectNames')); //NOTE3
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -247,6 +247,8 @@ class _MyHomePageState extends State<MyHomePage> {
     }
   }
 
+  // main list with data in it.
+  //TODO this code is weird ill look at it later.
   FractionallySizedBox projectList(myData) {
     List<Widget> projListItemList = <Widget>[];
     return FractionallySizedBox(
@@ -259,6 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  //build the
   FutureBuilder<String> projectFuture(myData, List<Widget> projListItemList) {
     return FutureBuilder<String>(
       future: myData,
@@ -269,7 +272,7 @@ class _MyHomePageState extends State<MyHomePage> {
           for (var i = 0; i < projectNameList.length; i++) {
             projListItemList.add(ProjListItem(
               name: (projectNameList[i])['$i'].toString() + "$i",
-              route: "/showProject/$i",
+              route: "/showProject/$i", //NOTE2
             ));
 
             // print(projectNameList[i]);
@@ -285,6 +288,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  //represents buttons scrollable list
   Container projectButtons(List<Widget> projListItemList) {
     return Container(
       height: 180,
@@ -299,33 +303,8 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-/*
-    ProjListItem() - List item that represents a project.
-    Fractionally sizing list items to 90% of the space in the outter projectList() container
-    Putting it into a container to display it
-    Aligning the text center on both axis within the list item.
-  */
-
-// FractionallySizedBox ProjListItem0(name, route) {
-//   return FractionallySizedBox(
-//     widthFactor: .9,
-//     child: TextButton(
-//       onPressed: () => context.go(route),
-//       child: Container(
-//         decoration: Shadows(Colors.blue[200]),
-//         margin: const EdgeInsets.only(bottom: 20),
-//         height: 38,
-//         child: Align(
-//           alignment: Alignment.center,
-//           child: Text(
-//             name,
-//           ),
-//         ),
-//       ),
-//     ),
-//   );
-// }
-
+//this needs to be a class because i dont know how to give the current context to a function.
+//The actual button that routes to the specific project
 class ProjListItem extends StatelessWidget {
   final name;
   final route;
@@ -337,7 +316,7 @@ class ProjListItem extends StatelessWidget {
     return FractionallySizedBox(
       widthFactor: .9,
       child: TextButton(
-        onPressed: () => context.go(route),
+        onPressed: () => context.go(route), //NOTE1
         child: Container(
           decoration: Shadows(Colors.blue[200]),
           margin: const EdgeInsets.only(bottom: 10),

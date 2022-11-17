@@ -52,6 +52,14 @@ public class OpheliaAPI {
         JsonNode projectJson = mapper.readTree(project);
         return projectJson;
     }
+
+    @GetMapping("/addProject")
+    public String addProject() throws Exception /*json parse exception*/ {
+        ///List of stuff and i need to know what.
+        ObjectMapper mapper = new ObjectMapper();
+        exampleUser.getProjectList().add(new Project ());
+        return "project added to user";
+    }
     
 /*    public String greeting(@RequestParam(value = "name", defaultValue = "World") String name) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
