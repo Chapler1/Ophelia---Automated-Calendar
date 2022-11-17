@@ -34,6 +34,15 @@ public class OpheliaAPI {
         JsonNode projectJson = mapper.readTree(exampleUser.getFullProjectJson());
         return projectJson;
     }
+
+    @CrossOrigin
+    @GetMapping("/getUserCalendar")
+    public JsonNode getUserCal() throws Exception /*json parse exception*/ {
+        ///List of stuff and i need to know what.
+        ObjectMapper mapper = new ObjectMapper();
+        JsonNode projectJson = mapper.readTree(exampleUser.getFullProjectJson());
+        return projectJson;
+    }
 /*    public String greeting(@RequestParam(value = "name", defaultValue = "World") String name) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode projectJson = mapper.readTree(exampleUser.getProjectList());
