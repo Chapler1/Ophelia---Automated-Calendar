@@ -263,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
   */
   Future<String> fetchNames() async {
     final response =
-        await http.get(Uri.parse('http://192.168.86.35:8080/getProjectNames'));
+        await http.get(Uri.parse('http://71.182.194.216:8080/getProjectNames'));
 
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
@@ -287,29 +287,33 @@ class _MyHomePageState extends State<MyHomePage> {
             textAlign: TextAlign.center,
             "Welcome user you have 5 projects scheduled for this week",
           ),
-          FutureBuilder<String>(
-            future: myData,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                String data = snapshot.data!;
-                final List<dynamic> projectNameList = jsonDecode(data);
-                for (var i = 0; i < projectNameList.length; i++) {
-                  projListItemList.add(ProjListItem(
-                      (projectNameList[i])['$i'].toString() + "$i"));
-
-                  print(projectNameList[i]);
-                }
-                return projectButtons(projListItemList);
-              } else if (snapshot.hasError) {
-                return Text('${snapshot.error}');
-              }
-
-              // By default, show a loading spinner.
-              return const CircularProgressIndicator();
-            },
-          ),
+          projectFuture(myData, projListItemList),
         ],
       ),
+    );
+  }
+
+  FutureBuilder<String> projectFuture(myData, List<Widget> projListItemList) {
+    return FutureBuilder<String>(
+      future: myData,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          String data = snapshot.data!;
+          final List<dynamic> projectNameList = jsonDecode(data);
+          for (var i = 0; i < projectNameList.length; i++) {
+            projListItemList.add(
+                ProjListItem((projectNameList[i])['$i'].toString() + "$i"));
+
+            print(projectNameList[i]);
+          }
+          return projectButtons(projListItemList);
+        } else if (snapshot.hasError) {
+          return Text('${snapshot.error}');
+        }
+
+        // By default, show a loading spinner.
+        return const CircularProgressIndicator();
+      },
     );
   }
 

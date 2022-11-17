@@ -66,10 +66,12 @@ class DailyEventList extends StatelessWidget {
             height: 60,
             child: Align(
               alignment: Alignment.center,
-              child: ListView(
-                scrollDirection: Axis.horizontal,
-                padding: const EdgeInsets.all(8),
-                children: const <Widget>[Event(), Event(), Event()],
+              child: SafeArea(
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  padding: const EdgeInsets.all(8),
+                  children: const <Widget>[Event(), Event(), Event()],
+                ),
               ),
             ),
           ),

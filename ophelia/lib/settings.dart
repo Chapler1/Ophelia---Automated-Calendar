@@ -23,8 +23,8 @@ class Settings extends StatefulWidget {
 }
 
 Future<String> getAllProjects() async {
-  final response =
-      await http.get(Uri.parse('http://192.168.86.35:8080/getFullProjectJson'));
+  final response = await http
+      .get(Uri.parse('http://71.182.194.216:8080/getFullProjectJson'));
 
   if (response.statusCode == 200) {
     // If the server did return a 200 OK response,
