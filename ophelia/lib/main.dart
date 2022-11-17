@@ -1,50 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:go_router/go_router.dart';
-import 'planProject.dart';
+import 'inputProject.dart';
 import 'weekView.dart';
 import 'settings.dart';
 import "generateSchedules.dart";
 import 'myappbar.dart';
-import 'http_service.dart';
+import 'showProject.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 void main() {
   runApp(const MyApp());
-}
-
-//Outlined text effect styles
-class TitleText extends StatelessWidget {
-  const TitleText({
-    Key? key,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Text(
-          "Ophelia",
-          style: TextStyle(
-            fontSize: 20,
-            foreground: Paint()
-              ..style = PaintingStyle.stroke
-              ..strokeWidth = 6
-              ..color = Color.fromARGB(255, 6, 46, 107),
-          ),
-        ),
-        // Solid text as fill.
-        Text(
-          "Ophelia",
-          style: TextStyle(
-            fontSize: 20,
-            color: Colors.grey[300],
-          ),
-        ),
-      ],
-    );
-  }
 }
 
 //RPC routing instead of REST
@@ -86,6 +53,12 @@ final GoRouter _router = GoRouter(
           builder: (BuildContext context, GoRouterState state) =>
               const Settings(title: "hello world"),
         ),
+        GoRoute(
+          path: 'showProject/:id',
+          builder: (BuildContext context, GoRouterState state) => ShowProject(
+            id: state.params['id']!,
+          ),
+        ),
       ],
     ),
   ],
@@ -101,15 +74,6 @@ class MyApp extends StatelessWidget {
       routerConfig: _router,
       title: 'Flutter Demo',
       theme: ThemeData(
-        // This is the theme of your application.
-        //
-        // Try running your application with "flutter run". You'll see the
-        // application has a blue toolbar. Then, without quitting the app, try
-        // changing the primarySwatch below to Colors.green and then invoke
-        // "hot reload" (press "r" in the console where you ran "flutter run",
-        // or simply save your changes to "hot reload" in a Flutter IDE).
-        // Notice that the counter didn't reset back to zero; the application
-        // is not restarted.
         primarySwatch: Colors.blue,
       ),
       // home: const MyHomePage(title: 'Flutter Demo Page'),
@@ -153,16 +117,6 @@ class _MyHomePageState extends State<MyHomePage> {
     myData = fetchNames();
   }
 
-  void _incrementCounter() {
-    setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // This method is rerun every time setState is called, for instance as done
@@ -184,8 +138,17 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
+              const Spacer(),
               Container(
-                margin: const EdgeInsets.only(top: 90),
+                color: Colors.blue[200],
+                padding: const EdgeInsets.all(10),
+                child: const Text(
+                  textAlign: TextAlign.center,
+                  "Welcome user you have 5 projects scheduled for this week",
+                ),
+              ),
+              Container(
+                margin: const EdgeInsets.only(top: 0),
                 color: Colors.blue[100],
                 child: TableCalendar(
                   firstDay: DateTime.utc(2010, 10, 16),
@@ -223,34 +186,38 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              Spacer(),
               TextButton(
                 onPressed: () {
                   context.go('/weekview');
                 },
+                style: TextButton.styleFrom(
+                    padding: EdgeInsets.zero,
+                    minimumSize: Size(50, 30),
+                    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    alignment: Alignment.centerLeft),
                 child: Container(
                   //this makes the width expand.
-                  width: double.infinity,
                   height: 33,
+                  margin: const EdgeInsets.only(bottom: 70, top: 0),
+
                   alignment: Alignment.center,
-                  decoration: (BoxDecoration(
-                      border: Border.all(
-                        color: Color.fromARGB(255, 6, 46, 107),
-                        width: 2.5,
-                      ),
-                      color: Color.fromARGB(255, 255, 255, 255),
-                      borderRadius: BorderRadius.circular(15))),
+                  color: Colors.blue[300],
 
                   // we can set width here with conditions
                   // var height = MediaQuery.of(context).viewPadding.top;
-                  child: Text('Week View'),
+                  child: const Text(
+                    'Week View',
+                    style: TextStyle(color: Colors.black),
+                  ),
                 ),
               ),
               //optional makes the calender more to the top of the screen Spacer(),
-              Align(
-                alignment: Alignment.bottomCenter,
-                child: SafeArea(
-                  child: projectList(myData),
+              Container(
+                child: Align(
+                  alignment: Alignment.bottomCenter,
+                  child: SafeArea(
+                    child: projectList(myData),
+                  ),
                 ),
               ),
             ],
@@ -286,10 +253,6 @@ class _MyHomePageState extends State<MyHomePage> {
       widthFactor: 1,
       child: Column(
         children: [
-          const Text(
-            textAlign: TextAlign.center,
-            "Welcome user you have 5 projects scheduled for this week",
-          ),
           projectFuture(myData, projListItemList),
         ],
       ),
@@ -304,10 +267,12 @@ class _MyHomePageState extends State<MyHomePage> {
           String data = snapshot.data!;
           final List<dynamic> projectNameList = jsonDecode(data);
           for (var i = 0; i < projectNameList.length; i++) {
-            projListItemList.add(
-                ProjListItem((projectNameList[i])['$i'].toString() + "$i"));
+            projListItemList.add(ProjListItem(
+              name: (projectNameList[i])['$i'].toString() + "$i",
+              route: "/showProject/$i",
+            ));
 
-            print(projectNameList[i]);
+            // print(projectNameList[i]);
           }
           return projectButtons(projListItemList);
         } else if (snapshot.hasError) {
@@ -341,21 +306,52 @@ class _MyHomePageState extends State<MyHomePage> {
     Aligning the text center on both axis within the list item.
   */
 
-FractionallySizedBox ProjListItem(name) {
-  return FractionallySizedBox(
-    widthFactor: .9,
-    child: Container(
-      decoration: Shadows(Colors.blue[200]),
-      margin: const EdgeInsets.only(bottom: 20),
-      height: 38,
-      child: Align(
-        alignment: Alignment.center,
-        child: Text(
-          name,
+// FractionallySizedBox ProjListItem0(name, route) {
+//   return FractionallySizedBox(
+//     widthFactor: .9,
+//     child: TextButton(
+//       onPressed: () => context.go(route),
+//       child: Container(
+//         decoration: Shadows(Colors.blue[200]),
+//         margin: const EdgeInsets.only(bottom: 20),
+//         height: 38,
+//         child: Align(
+//           alignment: Alignment.center,
+//           child: Text(
+//             name,
+//           ),
+//         ),
+//       ),
+//     ),
+//   );
+// }
+
+class ProjListItem extends StatelessWidget {
+  final name;
+  final route;
+  const ProjListItem({super.key, required this.name, required this.route});
+
+  // This widget is the root of your application.
+  @override
+  Widget build(BuildContext context) {
+    return FractionallySizedBox(
+      widthFactor: .9,
+      child: TextButton(
+        onPressed: () => context.go(route),
+        child: Container(
+          decoration: Shadows(Colors.blue[200]),
+          margin: const EdgeInsets.only(bottom: 10),
+          height: 38,
+          child: Align(
+            alignment: Alignment.center,
+            child: Text(
+              name,
+            ),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 // BOX shadows styles
