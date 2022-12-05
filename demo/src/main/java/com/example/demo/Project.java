@@ -10,6 +10,8 @@ public class Project  {
     LocalDate startDate;
     LocalDate deadline;
 
+    //index of this project in the users list
+    static int projectIdx = 0;
     String projectName;
     int projectColor;
     int numSessions;
@@ -28,6 +30,7 @@ public class Project  {
         this.numSessions = numSessions;
         this.numHours = numHours;
         ///set list of days 'projectList'
+        projectIdx++;
         this.projectList = distributeProject();
     }
     //creates a dummy project with given data.
@@ -109,8 +112,8 @@ public class Project  {
     }
 
     public String toString(){
-        String toReturn = String.format("{\"projectName\": \"%s\", \"projectColor\": %s, \"numSessions\": %s, \"numHours\": %s, \"projectNotes\": \"%s\", \"startDate\":\"%s\", \"endDate\": \"%s\", \"projectDays\": [%s",
-                projectName, projectColor, numSessions, numHours, projectNotes, startDate.toString(), deadline.toString(), projectList.get(1));
+        String toReturn = String.format("{\"projectName\": \"%s\", \"projectColor\": %s, \"numSessions\": %s, \"numHours\": %s, \"projectNotes\": \"%s\", \"startDate\":\"%s\", \"endDate\": \"%s\", \"projectIndex\": \"%d\", \"projectDays\": [%s",
+                projectName, projectColor, numSessions, numHours, projectNotes, startDate.toString(), deadline.toString(), projectIdx, projectList.get(1));
         for(int i = 1; i < projectList.size(); i++){
             toReturn += String.format(",%s",projectList.get(i).toString());
         }
