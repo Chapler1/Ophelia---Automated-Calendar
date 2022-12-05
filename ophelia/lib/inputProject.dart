@@ -1,5 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'package:http/http.dart' as http;
 import 'package:go_router/go_router.dart';
 import 'myappbar.dart';
 import 'dart:math';
@@ -13,12 +16,14 @@ class _ProjectInputState extends State<ProjectInput> {
   /// Creates a [Page1Screen].
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
+  late Future<String> myData;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
+      myData = fetchNames(); //NOTE4
     });
   }
 
@@ -135,5 +140,96 @@ class _ProjectInputState extends State<ProjectInput> {
     super.dispose();
   }
 }
+
+class Project {
+  final String projectName;
+  final String projectColor;
+  final int numSessions;
+  final int numHours;
+  final String projectNotes;
+  final String startDate;
+  final String endDate;
+  final List<ProjectDay> endDate;
+
+  const Project({required this.id, required this.title});
+
+  factory Project.fromJson(Map<String, dynamic> json) {
+    return Project(
+      id: json['id'],
+      title: json['title'],
+    );
+  }
+}
+
+class ProjectDay {
+  final String eventName;
+  final String timeDelta;
+}
+
+Future<Project> createProject(String title) async {
+  final response = await http.post(
+    Uri.parse('http://71.182.194.216:8080/planProject'),
+    headers: <String, String>{
+      'Content-Type': 'application/json; charset=UTF-8',
+    },
+    body: jsonEncode(<String, String>{
+      "projectName": "testName",
+      "projectDeadline": "12/25/2022",
+      "numSessions": "5",
+      "numHours": "2"
+    }),
+  );
+
+  if (response.statusCode == 201) {
+    // If the server did return a 201 CREATED response,
+    // then parse the JSON.
+    return Project.fromJson(jsonDecode(response.body));
+  } else {
+    // If the server did not return a 201 CREATED response,
+    // then throw an exception.
+    throw Exception('Failed to create project.');
+  }
+}
+
+// // main list with data in it.
+// //TODO this code is weird ill look at it later.
+// FractionallySizedBox projectList(myData) {
+//   List<Widget> projListItemList = <Widget>[];
+//   return FractionallySizedBox(
+//     widthFactor: 1,
+//     child: Column(
+//       children: [
+//         projectFuture(myData, projListItemList),
+//       ],
+//     ),
+//   );
+// }
+
+// //build the list at the bottom of the home screen and set the routes to be able to go into the per project view.
+// FutureBuilder<String> projectFuture(myData, List<Widget> projListItemList) {
+//   return FutureBuilder<String>(
+//     future: myData,
+//     builder: (context, snapshot) {
+//       if (snapshot.hasData) {
+//         String data = snapshot.data!;
+//         final List<dynamic> projectNameList = jsonDecode(data);
+//         for (var i = 0; i < projectNameList.length; i++) {
+//           projListItemList.add(ProjListItem(
+//             name: (projectNameList[i])['$i'].toString() + "$i",
+//             route: "/showProject/$i", //NOTE2
+//           ));
+
+//           // print(projectNameList[i]);
+//         }
+//         return projectButtons(projListItemList);
+//       } else if (snapshot.hasError) {
+//         return Text('${snapshot.error}');
+//       }
+
+//       // By default, show a loading spinner.
+//       return const CircularProgressIndicator();
+//     },
+//   );
+// }
 
 //a function to take an array of 7 ints and return a widget with horizontally sized boxes like this.

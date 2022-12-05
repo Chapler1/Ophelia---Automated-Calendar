@@ -261,7 +261,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  //build the
+  //build the list at the bottom of the home screen and set the routes to be able to go into the per project view.
   FutureBuilder<String> projectFuture(myData, List<Widget> projListItemList) {
     return FutureBuilder<String>(
       future: myData,
