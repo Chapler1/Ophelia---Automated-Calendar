@@ -11,7 +11,7 @@ public class Project  {
     LocalDate deadline;
 
     //index of this project in the users list
-    static int projectIdx = 0;
+    int projectIdx = 0;
     String projectName;
     int projectColor;
     int numSessions;
@@ -30,7 +30,6 @@ public class Project  {
         this.numSessions = numSessions;
         this.numHours = numHours;
         ///set list of days 'projectList'
-        projectIdx++;
         this.projectList = distributeProject();
     }
     //creates a dummy project with given data.
@@ -44,7 +43,6 @@ public class Project  {
         numSessions = 10;
         numHours = 20;
         projectNotes = "hello world project notes";
-        projectIdx++;
 
         //10 2 hours sessions on 10 days.
         Random rand = new Random();
@@ -64,6 +62,11 @@ public class Project  {
     public String getName() {
         return projectName;
     }
+
+    public void setProjectIndex(int projectIdx) {
+        this.projectIdx = projectIdx;
+    }
+
 
     public ArrayList<DateEvent> distributeProject() {
         ArrayList<DateEvent> eventList = new ArrayList<DateEvent>();

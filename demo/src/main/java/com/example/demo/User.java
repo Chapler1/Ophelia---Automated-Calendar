@@ -52,9 +52,12 @@ public class User {
 
         filledBlocksWeek = blockedOutTimesWeekly;
         sleep = new Event(sleepStart, sleepEnd);
-        projectList.add(new Project());
-        projectList.add(new Project());
-        projectList.add(new Project());
+        Project p1 = new Project().setProjectIndex(0);
+        Project p2 = new Project().setProjectIndex(1);
+        Project p3 = new Project().setProjectIndex(2);
+        projectList.add(p1);
+        projectList.add(p2);
+        projectList.add(p3);
         userCal = new Calendar();
     }
 

@@ -23,7 +23,6 @@ class _ProjectInputState extends State<ProjectInput> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
-      myData = createProject(); //NOTE4
     });
   }
 
@@ -97,7 +96,10 @@ class _ProjectInputState extends State<ProjectInput> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: TextButton(
-                    onPressed: () => {context.go('/generateSchedules/1')},
+                    onPressed: () => {
+                      myData = createProject(),
+                      context.go('/generateSchedules/1'),
+                    },
                     child: Container(
                       width: (double.infinity),
                       height: 50,

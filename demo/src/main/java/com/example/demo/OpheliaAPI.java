@@ -23,6 +23,8 @@ public class OpheliaAPI {
     ArrayList<Project> projectList = new ArrayList<Project>();
     User exampleUser = new User();
 
+    int numProjects = 2;
+
     @CrossOrigin
     @GetMapping("/getProjectNames")
     public JsonNode getPName() throws Exception /*json parse exception*/ {
@@ -85,6 +87,8 @@ public class OpheliaAPI {
         Project newProj = new Project(LocalDate.now(), deadline, projectName, exampleUser, numSessions, numHours);
         
         System.out.println(projectJson.get("projectName"));
+        newProj.setProjectIndex(numProjects);
+        numProjects++;
         exampleUser.projectList.add(newProj);
         return newProj.toString();
     }  
