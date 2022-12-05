@@ -85,6 +85,7 @@ public class OpheliaAPI {
         Project newProj = new Project(LocalDate.now(), deadline, projectName, exampleUser, numSessions, numHours);
         
         System.out.println(projectJson.get("projectName"));
+        exampleUser.projectList.add(newProj);
         return newProj.toString();
     }  
     

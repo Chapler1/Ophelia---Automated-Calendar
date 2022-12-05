@@ -39,9 +39,11 @@ final GoRouter _router = GoRouter(
               ProjectInput(),
         ),
         GoRoute(
-          path: 'generateSchedules',
+          path: 'generateSchedules/:id',
           builder: (BuildContext context, GoRouterState state) =>
-              const GenerateSchedules(),
+              GenerateSchedules(
+            id: state.params['id']!,
+          ),
         ),
         GoRoute(
           path: 'weekView',

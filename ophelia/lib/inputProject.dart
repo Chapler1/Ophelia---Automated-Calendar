@@ -97,7 +97,7 @@ class _ProjectInputState extends State<ProjectInput> {
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: TextButton(
-                    onPressed: () => {context.go('/generateSchedules')},
+                    onPressed: () => {context.go('/generateSchedules/1')},
                     child: Container(
                       width: (double.infinity),
                       height: 50,
@@ -149,7 +149,7 @@ class Project {
   final String projectNotes;
   final String startDate;
   final String endDate;
-  final int projectIndex.
+  final int projectIndex;
   final List<dynamic> projectDays;
 
   const Project(
@@ -160,6 +160,7 @@ class Project {
       required this.projectNotes,
       required this.startDate,
       required this.endDate,
+      required this.projectIndex,
       required this.projectDays});
 
   factory Project.fromJson(Map<String, dynamic> json) {
@@ -171,6 +172,7 @@ class Project {
       projectNotes: json['projectNotes'],
       startDate: json['startDate'],
       endDate: json['endDate'],
+      projectIndex: json['projectIndex'],
       projectDays: json['projectDays'],
     );
   }
