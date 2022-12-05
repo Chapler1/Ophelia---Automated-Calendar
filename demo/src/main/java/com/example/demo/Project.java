@@ -44,6 +44,7 @@ public class Project  {
         numSessions = 10;
         numHours = 20;
         projectNotes = "hello world project notes";
+        projectIdx++;
 
         //10 2 hours sessions on 10 days.
         Random rand = new Random();

@@ -149,6 +149,7 @@ class Project {
   final String projectNotes;
   final String startDate;
   final String endDate;
+  final int projectIndex.
   final List<dynamic> projectDays;
 
   const Project(
