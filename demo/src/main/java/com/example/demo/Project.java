@@ -98,7 +98,7 @@ public class Project  {
         int eventsBooked = 0;
         for (double dayIndex = 0; eventsBooked < numSessions; dayIndex += ((double)freeDays.size() / (double)numSessions)) {
             int intDayIndex = (int) dayIndex;
-            DateEvent event = new DateEvent(numHours/numSessions, freeDays.get(intDayIndex).date);
+            DateEvent event = new DateEvent(numHours, freeDays.get(intDayIndex).date);
             eventsBooked++;
             eventList.add(event); //add to projects eventList
             freeDays.get(intDayIndex).getEventList().add(event); //add to Day's eventList

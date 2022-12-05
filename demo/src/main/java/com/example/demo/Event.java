@@ -54,7 +54,7 @@ public class Event {
             return String.format("{\"eventName\": \"%s\", \"startTime\": %s, \"endTime\": %s, \"timeDelta\": %f}", ("project #"+uniqueName), addQuotes(startTime.toString()), addQuotes(endTime.toString()), timeDelta);
         }
         else{
-            return String.format("{\"eventName\": \"%s\", timeDelta: %f, }", ("project #"+uniqueName), timeDelta);
+            return String.format("{\"eventName\": \"%s\", \"timeDelta\": %f }", ("project #"+uniqueName), timeDelta);
         }
     }
 
