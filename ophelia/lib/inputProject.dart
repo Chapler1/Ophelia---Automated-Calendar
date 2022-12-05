@@ -16,14 +16,14 @@ class _ProjectInputState extends State<ProjectInput> {
   /// Creates a [Page1Screen].
   final TextEditingController _controller = TextEditingController();
   final FocusNode _focusNode = FocusNode();
-  late Future<String> myData;
+  late Future<Project> myData;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
-      myData = fetchNames(); //NOTE4
+      myData = createProject(); //NOTE4
     });
   }
 
@@ -143,20 +143,34 @@ class _ProjectInputState extends State<ProjectInput> {
 
 class Project {
   final String projectName;
-  final String projectColor;
+  final int projectColor;
   final int numSessions;
   final int numHours;
   final String projectNotes;
   final String startDate;
   final String endDate;
-  final List<ProjectDay> endDate;
+  final List<dynamic> projectDays;
 
-  const Project({required this.id, required this.title});
+  const Project(
+      {required this.projectName,
+      required this.projectColor,
+      required this.numSessions,
+      required this.numHours,
+      required this.projectNotes,
+      required this.startDate,
+      required this.endDate,
+      required this.projectDays});
 
   factory Project.fromJson(Map<String, dynamic> json) {
     return Project(
-      id: json['id'],
-      title: json['title'],
+      projectName: json['projectName'],
+      projectColor: json['projectColor'],
+      numSessions: json['numSessions'],
+      numHours: json['numHours'],
+      projectNotes: json['projectNotes'],
+      startDate: json['startDate'],
+      endDate: json['endDate'],
+      projectDays: json['projectDays'],
     );
   }
 }
@@ -164,9 +178,21 @@ class Project {
 class ProjectDay {
   final String eventName;
   final String timeDelta;
+  final String date;
+
+  const ProjectDay(
+      {required this.eventName, required this.timeDelta, required this.date});
+
+  factory ProjectDay.fromJson(Map<String, dynamic> json) {
+    return ProjectDay(
+      eventName: json['eventName'],
+      timeDelta: json['timeDelta'],
+      date: json['date'],
+    );
+  }
 }
 
-Future<Project> createProject(String title) async {
+Future<Project> createProject() async {
   final response = await http.post(
     Uri.parse('http://71.182.194.216:8080/planProject'),
     headers: <String, String>{
@@ -180,7 +206,7 @@ Future<Project> createProject(String title) async {
     }),
   );
 
-  if (response.statusCode == 201) {
+  if (response.statusCode == 200) {
     // If the server did return a 201 CREATED response,
     // then parse the JSON.
     return Project.fromJson(jsonDecode(response.body));
