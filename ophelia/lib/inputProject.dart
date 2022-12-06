@@ -23,6 +23,7 @@ class _ProjectInputState extends State<ProjectInput> {
   final FocusNode _focusNode3 = FocusNode();
   late Project myData;
   //stateful piece of information set to the output of the datepicker that i used.
+  // ignore: avoid_init_to_null
   var dateInput = null;
 
   @override
@@ -59,6 +60,7 @@ class _ProjectInputState extends State<ProjectInput> {
                     labelText: 'Enter project name',
                   ),
                 ),
+                //scrollable box with random colors generated.
                 Container(
                   margin: const EdgeInsets.only(top: 20, bottom: 20),
                   child: FractionallySizedBox(
@@ -66,12 +68,7 @@ class _ProjectInputState extends State<ProjectInput> {
                     child: Column(
                       children: [
                         Text("Set Project Color"),
-                        Container(
-                            height: 50,
-                            color: Colors.white,
-                            child: ListView(
-                                scrollDirection: Axis.horizontal,
-                                children: nCircles(100))),
+                        NCircles(),
                       ],
                     ),
                   ),
@@ -125,7 +122,7 @@ class _ProjectInputState extends State<ProjectInput> {
                           _controller2.text, _controller3.text);
                       var plannedIndex = myData.projectIndex;
                       //go to the screen with the project that was just planned.
-                      context.go('/generateSchedules/$plannedIndex')
+                      context.go('/generateSchedules/$plannedIndex');
                     },
                     child: Container(
                       width: (double.infinity),
@@ -144,30 +141,60 @@ class _ProjectInputState extends State<ProjectInput> {
         ),
       );
 
-  Container colorCircle(Color c) {
-    return Container(
-      margin: const EdgeInsets.only(left: 20),
-      width: 30,
-      height: 30,
-      decoration: BoxDecoration(color: c, shape: BoxShape.circle),
-    );
-  }
-
-  List<Widget> nCircles(n) {
-    List<Widget> circleList = <Widget>[];
-    for (int i = 0; i < n; i++) {
-      circleList.add(colorCircle(
-          Colors.primaries[Random().nextInt(Colors.primaries.length)]));
-    }
-    return circleList;
-  }
-
   @override
   void dispose() {
     _focusNode.dispose();
     _controller.dispose();
     super.dispose();
   }
+}
+
+class NCircles extends StatefulWidget {
+  const NCircles({super.key});
+
+  @override
+  State<NCircles> createState() => _NCirclesState();
+}
+
+Container colorCircle(Color c) {
+  return Container(
+    margin: const EdgeInsets.only(left: 20),
+    width: 30,
+    height: 30,
+    decoration: BoxDecoration(color: c, shape: BoxShape.circle),
+  );
+}
+
+class _NCirclesState extends State<NCircles> {
+  bool _isChecked = false;
+  @override
+  Widget build(BuildContext context) {
+    return ListView.builder(
+      scrollDirection: Axis.horizontal,
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int index) {
+        return InkWell(
+          onTap: () {
+            setState(() {
+              _isChecked = true;
+            });
+          },
+          child: colorCircle(_isChecked
+              ? Colors.white
+              : Colors.primaries[Random().nextInt(Colors.primaries.length)]),
+        );
+      },
+    );
+  }
+}
+
+List<Widget> nCircles(n) {
+  List<Widget> circleList = <Widget>[];
+  for (int i = 0; i < n; i++) {
+    circleList.add(colorCircle(
+        Colors.primaries[Random().nextInt(Colors.primaries.length)]));
+  }
+  return circleList;
 }
 
 class Project {
