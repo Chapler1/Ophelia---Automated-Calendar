@@ -80,7 +80,7 @@ public class OpheliaAPI {
 
 
 
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         //string to date
         LocalDate deadline = LocalDate.parse(projectDeadline, dateTimeFormatter);
 
