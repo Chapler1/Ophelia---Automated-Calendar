@@ -73,6 +73,7 @@ public class OpheliaAPI {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode projectJson = mapper.readTree(message);
         String projectName = projectJson.get("projectName").textValue();
+        int projectColor = Integer.parseInt(projectJson.get("projectColor").textValue());
         System.out.println(projectName);
         String projectDeadline = projectJson.get("projectDeadline").textValue();
         int numSessions = Integer.parseInt(projectJson.get("numSessions").textValue());
@@ -84,7 +85,7 @@ public class OpheliaAPI {
         //string to date
         LocalDate deadline = LocalDate.parse(projectDeadline, dateTimeFormatter);
 
-        Project newProj = new Project(LocalDate.now(), deadline, projectName, exampleUser, numSessions, numHours);
+        Project newProj = new Project(LocalDate.now(), deadline, projectColor, projectName, exampleUser, numSessions, numHours);
         
         System.out.println(projectJson.get("projectName"));
         numProjects++;

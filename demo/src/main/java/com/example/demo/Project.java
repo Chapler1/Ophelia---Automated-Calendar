@@ -21,12 +21,13 @@ public class Project  {
     //list of days and time deltas.
     ArrayList<DateEvent> projectList = new ArrayList<DateEvent>();
 
-    public Project(LocalDate startDate, LocalDate deadline, String projectName, User user, int numSessions, int numHours)
+    public Project(LocalDate startDate, LocalDate deadline, int projectColor, String projectName, User user, int numSessions, int numHours)
     {
         this.startDate = startDate;
         this.deadline = deadline;
         this.projectName = projectName;
         this.user = user;
+        this.projectColor = projectColor;
         this.numSessions = numSessions;
         this.numHours = numHours;
         ///set list of days 'projectList'

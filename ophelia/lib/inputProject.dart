@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:table_calendar/table_calendar.dart';
 import 'package:date_time_picker/date_time_picker.dart';
 import 'package:http/http.dart' as http;
@@ -15,16 +16,22 @@ class ProjectInput extends StatefulWidget {
 
 class _ProjectInputState extends State<ProjectInput> {
   /// Creates a [Page1Screen].
-  final TextEditingController _controller = TextEditingController();
+  final TextEditingController _nameController = TextEditingController();
   final FocusNode _focusNode = FocusNode();
   final TextEditingController _controller2 = TextEditingController();
   final FocusNode _focusNode2 = FocusNode();
   final TextEditingController _controller3 = TextEditingController();
   final FocusNode _focusNode3 = FocusNode();
   late Project myData;
+
+  Color pickerColor = Color(0xff443a49);
+  Color currentColor = Color(0xff443a49);
   //stateful piece of information set to the output of the datepicker that i used.
   // ignore: avoid_init_to_null
   var dateInput = null;
+  void changeColor(Color color) {
+    setState(() => pickerColor = color);
+  }
 
   @override
   void initState() {
@@ -54,23 +61,10 @@ class _ProjectInputState extends State<ProjectInput> {
                 ),
                 TextFormField(
                   focusNode: _focusNode,
-                  controller: _controller,
+                  controller: _nameController,
                   decoration: const InputDecoration(
                     border: UnderlineInputBorder(),
                     labelText: 'Enter project name',
-                  ),
-                ),
-                //scrollable box with random colors generated.
-                Container(
-                  margin: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: FractionallySizedBox(
-                    widthFactor: .9,
-                    child: Column(
-                      children: [
-                        Text("Set Project Color"),
-                        NCircles(),
-                      ],
-                    ),
                   ),
                 ),
                 DateTimePicker(
@@ -106,20 +100,40 @@ class _ProjectInputState extends State<ProjectInput> {
                     labelText: 'Approximate the number of hours to complete',
                   ),
                 ),
+                //scrollable box with random colors generated.
+                Container(
+                  margin: const EdgeInsets.only(top: 20, bottom: 20),
+                  child: FractionallySizedBox(
+                    widthFactor: .9,
+                    child: Column(
+                      children: [
+                        Text("Set Project Color"),
+                        MaterialPicker(
+                          pickerColor: pickerColor,
+                          onColorChanged: changeColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: TextButton(
                     onPressed: () async {
                       print(dateInput);
                       //dont submit or go to the next screen if the user hasnt entered anything.
-                      if (_controller.text == "" ||
+                      if (_nameController.text == "" ||
                           _controller2.text == "" ||
                           dateInput == null ||
                           _controller3.text == "") {
                         return;
                       }
-                      myData = await createProject(_controller.text, dateInput,
-                          _controller2.text, _controller3.text);
+                      myData = await createProject(
+                          _nameController.text,
+                          dateInput,
+                          _controller2.text,
+                          currentColor.value,
+                          _controller3.text);
                       var plannedIndex = myData.projectIndex;
                       //go to the screen with the project that was just planned.
                       context.go('/generateSchedules/$plannedIndex');
@@ -144,16 +158,9 @@ class _ProjectInputState extends State<ProjectInput> {
   @override
   void dispose() {
     _focusNode.dispose();
-    _controller.dispose();
+    _nameController.dispose();
     super.dispose();
   }
-}
-
-class NCircles extends StatefulWidget {
-  const NCircles({super.key});
-
-  @override
-  State<NCircles> createState() => _NCirclesState();
 }
 
 Container colorCircle(Color c) {
@@ -165,36 +172,16 @@ Container colorCircle(Color c) {
   );
 }
 
-class _NCirclesState extends State<NCircles> {
-  bool _isChecked = false;
-  @override
-  Widget build(BuildContext context) {
-    return ListView.builder(
-      scrollDirection: Axis.horizontal,
-      itemCount: 10,
-      itemBuilder: (BuildContext context, int index) {
-        return InkWell(
-          onTap: () {
-            setState(() {
-              _isChecked = true;
-            });
-          },
-          child: colorCircle(_isChecked
-              ? Colors.white
-              : Colors.primaries[Random().nextInt(Colors.primaries.length)]),
-        );
-      },
-    );
-  }
-}
-
-List<Widget> nCircles(n) {
+ListView nCircles(n) {
   List<Widget> circleList = <Widget>[];
   for (int i = 0; i < n; i++) {
-    circleList.add(colorCircle(
-        Colors.primaries[Random().nextInt(Colors.primaries.length)]));
+    // circleList.add(NCircles(numCircles: 100));
   }
-  return circleList;
+  var list = ListView(
+    scrollDirection: Axis.horizontal,
+    children: circleList,
+  );
+  return list;
 }
 
 class Project {
@@ -252,7 +239,7 @@ class ProjectDay {
 }
 
 Future<Project> createProject(
-    projectName, projectDeadline, numSessions, numHours) async {
+    projectName, currentColor, projectDeadline, numSessions, numHours) async {
   final response = await http.post(
     Uri.parse('http://71.182.194.216:8080/planProject'),
     headers: <String, String>{
@@ -260,6 +247,7 @@ Future<Project> createProject(
     },
     body: jsonEncode(<String, String>{
       "projectName": "$projectName",
+      "projectColor": "$currentColor",
       "projectDeadline": "$projectDeadline",
       "numSessions": "$numSessions",
       "numHours": "$numHours"

@@ -33,6 +33,7 @@ dependencies:
   go_router: ^5.1.6
   http: ^0.13.5
   date_time_picker: "^2.1.0"
+  flutter_colorpicker: ^1.0.3
   flutter:
     sdk: flutter
 
