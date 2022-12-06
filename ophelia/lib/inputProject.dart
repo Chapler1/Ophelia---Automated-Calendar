@@ -125,7 +125,7 @@ class _ProjectInputState extends State<ProjectInput> {
                           _controller2.text, _controller3.text);
                       var plannedIndex = myData.projectIndex;
                       //go to the screen with the project that was just planned.
-                      context.go('/generateSchedules/$plannedIndex');
+                      context.go('/generateSchedules/$plannedIndex')
                     },
                     child: Container(
                       width: (double.infinity),
