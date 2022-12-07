@@ -36,7 +36,7 @@ public class Project  {
     //creates a dummy project with given data.
     public Project(){
         projectName = "sample Project";
-        projectColor = "0";
+        projectColor = "16734003";
         LocalDate today = LocalDate.now();
         startDate = today;
         deadline = today.plusDays(10);
