@@ -82,7 +82,7 @@ public class User {
     public String getProjectNames(){
         //!! repeated code here 3x in this file basically
         if(projectList.size() == 0){
-            return "noProjects";
+            return "[noProjects]";
         }
         String toReturn = String.format("[{\"0\": \"%s\", \"projectColor\": \"%s\"}", projectList.get(0).getName(), projectList.get(0).getColor());
         for (int i = 1; i < projectList.size(); i++) {
