@@ -59,9 +59,9 @@ public class User {
         p1.setProjectIndex(0);
         p2.setProjectIndex(1);
         p3.setProjectIndex(2);
-        projectList.add(p1);
-        projectList.add(p2);
-        projectList.add(p3);
+        // projectList.add(p1);
+        // projectList.add(p2);
+        // projectList.add(p3);
         userCal = new Calendar();
     }
 
@@ -81,6 +81,9 @@ public class User {
     }
     public String getProjectNames(){
         //!! repeated code here 3x in this file basically
+        if(projectList.size() == 0){
+            return "noProjects";
+        }
         String toReturn = String.format("[{\"0\": \"%s\", \"projectColor\": \"%s\"}", projectList.get(0).getName(), projectList.get(0).getColor());
         for (int i = 1; i < projectList.size(); i++) {
             toReturn += String.format(",{\"%d\": \"%s\", \"projectColor\": \"%s\"}",i, projectList.get(i).getName(),  projectList.get(i).getColor());

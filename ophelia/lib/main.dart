@@ -293,6 +293,9 @@ class _MyHomePageState extends State<MyHomePage> {
         projListItemList = <Widget>[];
         if (snapshot.hasData) {
           String data = snapshot.data!;
+          if (data == "noProjects") {
+            return Text('No Projects Scheduled Yet');
+          }
           final List<dynamic> projectNameList = jsonDecode(data);
           for (var i = 0; i < projectNameList.length; i++) {
             projListItemList.add(ProjListItem(
@@ -301,7 +304,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Color(int.parse(projectNameList[i]['projectColor'])),
             ));
 
-            // print(projectNameList[i]['projectColor']);
+            print(projectNameList[i]['projectColor']);
           }
           return projectButtons(projListItemList);
         } else if (snapshot.hasError) {
