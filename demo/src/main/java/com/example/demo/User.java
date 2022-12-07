@@ -52,13 +52,13 @@ public class User {
 
         filledBlocksWeek = blockedOutTimesWeekly;
         sleep = new Event(sleepStart, sleepEnd);
-        Project p1 = new Project();
-        Project p2 = new Project();
-        Project p3 = new Project();
+        // Project p1 = new Project();
+        // Project p2 = new Project();
+        // Project p3 = new Project();
         
-        p1.setProjectIndex(0);
-        p2.setProjectIndex(1);
-        p3.setProjectIndex(2);
+        // p1.setProjectIndex(0);
+        // p2.setProjectIndex(1);
+        // p3.setProjectIndex(2);
         // projectList.add(p1);
         // projectList.add(p2);
         // projectList.add(p3);
@@ -82,7 +82,7 @@ public class User {
     public String getProjectNames(){
         //!! repeated code here 3x in this file basically
         if(projectList.size() == 0){
-            return "[noProjects]";
+            return "[\"noProjects\"]";
         }
         String toReturn = String.format("[{\"0\": \"%s\", \"projectColor\": \"%s\"}", projectList.get(0).getName(), projectList.get(0).getColor());
         for (int i = 1; i < projectList.size(); i++) {

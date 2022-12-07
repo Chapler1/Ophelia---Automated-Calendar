@@ -23,7 +23,7 @@ public class OpheliaAPI {
     ArrayList<Project> projectList = new ArrayList<Project>();
     User exampleUser = new User();
 
-    int numProjects = 2;
+    int numProjects = 0;
 
     @CrossOrigin
     @GetMapping("/getProjectNames")
