@@ -64,6 +64,10 @@ public class Project  {
         return projectName;
     }
 
+    public int getColor() {
+        return projectColor;
+    }
+
     public void setProjectIndex(int projectIdx) {
         this.projectIdx = projectIdx;
     }

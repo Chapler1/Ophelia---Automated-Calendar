@@ -275,9 +275,10 @@ class _MyHomePageState extends State<MyHomePage> {
             projListItemList.add(ProjListItem(
               name: (projectNameList[i])['$i'].toString() + "$i",
               route: "/showProject/$i", //NOTE2
+              color: 400,
             ));
 
-            // print(projectNameList[i]);
+            print(projectNameList[0]);
           }
           return projectButtons(projListItemList);
         } else if (snapshot.hasError) {
@@ -310,7 +311,12 @@ class _MyHomePageState extends State<MyHomePage> {
 class ProjListItem extends StatelessWidget {
   final name;
   final route;
-  const ProjListItem({super.key, required this.name, required this.route});
+  final color;
+  const ProjListItem(
+      {super.key,
+      required this.name,
+      required this.route,
+      required this.color});
 
   // This widget is the root of your application.
   @override
