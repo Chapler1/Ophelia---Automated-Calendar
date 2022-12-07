@@ -38,6 +38,8 @@ class _ProjectInputState extends State<ProjectInput> {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
+      _focusNode2.requestFocus();
+      _focusNode3.requestFocus();
     });
   }
 
@@ -50,72 +52,6 @@ class _ProjectInputState extends State<ProjectInput> {
             child: Column(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Container(
-                  width: double.infinity,
-                  height: 20,
-                  alignment: Alignment.center,
-                  margin: const EdgeInsets.only(top: 20),
-                  child: const Text(
-                    'Generated 12 Schedules',
-                  ),
-                ),
-                TextFormField(
-                  focusNode: _focusNode,
-                  controller: _nameController,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Enter project name',
-                  ),
-                ),
-                DateTimePicker(
-                  type: DateTimePickerType.date,
-                  dateMask: 'd MMM, yyyy',
-                  initialValue: DateTime.now().toString(),
-                  firstDate: DateTime(2000),
-                  lastDate: DateTime(2100),
-                  icon: Icon(Icons.event),
-                  dateLabelText: 'Date',
-                  onChanged: (val) {
-                    dateInput = val;
-                  },
-                  onSaved: (val) {
-                    dateInput = val;
-                  },
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  focusNode: _focusNode2,
-                  controller: _controller2,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Number of sessions to complete',
-                  ),
-                ),
-                TextFormField(
-                  keyboardType: TextInputType.number,
-                  focusNode: _focusNode3,
-                  controller: _controller3,
-                  decoration: const InputDecoration(
-                    border: UnderlineInputBorder(),
-                    labelText: 'Approximate the number of hours to complete',
-                  ),
-                ),
-                //scrollable box with random colors generated.
-                Container(
-                  margin: const EdgeInsets.only(top: 20, bottom: 20),
-                  child: FractionallySizedBox(
-                    widthFactor: .9,
-                    child: Column(
-                      children: [
-                        Text("Set Project Color"),
-                        MaterialPicker(
-                          pickerColor: pickerColor,
-                          onColorChanged: changeColor,
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
                 Align(
                   alignment: Alignment.bottomCenter,
                   child: TextButton(
@@ -148,7 +84,66 @@ class _ProjectInputState extends State<ProjectInput> {
                               textAlign: TextAlign.center)),
                     ),
                   ),
-                )
+                ),
+                TextFormField(
+                  focusNode: _focusNode,
+                  controller: _nameController,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Enter project name',
+                  ),
+                ),
+                DateTimePicker(
+                  type: DateTimePickerType.date,
+                  dateMask: 'd MMM, yyyy',
+                  initialValue: DateTime.now().toString(),
+                  firstDate: DateTime(2000),
+                  lastDate: DateTime(2100),
+                  icon: Icon(Icons.event),
+                  dateLabelText: 'Date',
+                  onChanged: (val) {
+                    dateInput = val;
+                  },
+                  onSaved: (val) {
+                    dateInput = val;
+                  },
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.numberWithOptions(
+                      signed: true, decimal: true),
+                  focusNode: _focusNode2,
+                  controller: _controller2,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Number of sessions to complete',
+                  ),
+                ),
+                TextFormField(
+                  keyboardType: TextInputType.numberWithOptions(
+                      signed: true, decimal: true),
+                  focusNode: _focusNode3,
+                  controller: _controller3,
+                  decoration: const InputDecoration(
+                    border: UnderlineInputBorder(),
+                    labelText: 'Approximate the number of hours to complete',
+                  ),
+                ),
+                //scrollable box with random colors generated.
+                Container(
+                  margin: const EdgeInsets.only(top: 20, bottom: 20),
+                  child: FractionallySizedBox(
+                    widthFactor: .9,
+                    child: Column(
+                      children: [
+                        Text("Set Project Color"),
+                        MaterialPicker(
+                          pickerColor: pickerColor,
+                          onColorChanged: changeColor,
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ],
             ),
           ),
@@ -159,6 +154,10 @@ class _ProjectInputState extends State<ProjectInput> {
   void dispose() {
     _focusNode.dispose();
     _nameController.dispose();
+    _focusNode2.dispose();
+    _controller2.dispose();
+    _focusNode3.dispose();
+    _controller3.dispose();
     super.dispose();
   }
 }
@@ -265,7 +264,6 @@ Future<Project> createProject(
     throw Exception('Failed to create project.');
   }
 }
-
 // // main list with data in it.
 // //TODO this code is weird ill look at it later.
 // FractionallySizedBox projectList(myData) {

@@ -31,12 +31,19 @@ final GoRouter _router = GoRouter(
     GoRoute(
       path: '/',
       builder: (BuildContext context, GoRouterState state) =>
-          const MyHomePage(title: 'Flutter Demo Page'),
+          MyHomePage(title: 'Flutter Demo Page', refresh: false),
       routes: <GoRoute>[
         GoRoute(
           path: 'projectInput',
           builder: (BuildContext context, GoRouterState state) =>
               ProjectInput(),
+        ),
+        GoRoute(
+          path: 'refresh',
+          builder: (BuildContext context, GoRouterState state) => MyHomePage(
+            title: 'Flutter Demo Page',
+            refresh: true,
+          ),
         ),
         GoRoute(
           path: 'generateSchedules/:id',
@@ -98,9 +105,11 @@ class _MainState extends State<Main> {
 }
 
 class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
+  MyHomePage({super.key, required this.title, required this.refresh});
 
   final String title;
+  final bool refresh;
+  // final myData = fetchNames();
 
   @override
   State<MyHomePage> createState() => _MyHomePageState();
@@ -111,12 +120,20 @@ class _MyHomePageState extends State<MyHomePage> {
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
 
-  late Future<String> myData;
+  late Future<String> myData = fetchNames();
 
   @override
   void initState() {
-    super.initState();
     myData = fetchNames(); //NOTE4
+    // projectList = projectList(myData, true);
+    super.initState();
+    if (widget.refresh) {}
+  }
+
+  @override
+  void dispose() {
+    print("FirstRoute: dispose");
+    super.dispose();
   }
 
   @override
@@ -127,7 +144,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-
+    myData = fetchNames();
     return Scaffold(
       extendBodyBehindAppBar: true,
       backgroundColor: Colors.blue[600],
@@ -218,7 +235,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 child: Align(
                   alignment: Alignment.bottomCenter,
                   child: SafeArea(
-                    child: projectList(myData),
+                    child: projectList(myData, true),
                   ),
                 ),
               ),
@@ -234,6 +251,7 @@ class _MyHomePageState extends State<MyHomePage> {
     Container with a list view of list items inside of it.
   */
   Future<String> fetchNames() async {
+    print("here");
     final response = await http
         .get(Uri.parse('http://71.182.194.216:8080/getProjectNames')); //NOTE3
 
@@ -251,8 +269,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
   // main list with data in it.
   //TODO this code is weird ill look at it later.
-  FractionallySizedBox projectList(myData) {
+  FractionallySizedBox projectList(myData, refresh) {
     List<Widget> projListItemList = <Widget>[];
+    if (refresh) {
+      projListItemList = <Widget>[];
+    }
     return FractionallySizedBox(
       widthFactor: 1,
       child: Column(
@@ -268,6 +289,8 @@ class _MyHomePageState extends State<MyHomePage> {
     return FutureBuilder<String>(
       future: myData,
       builder: (context, snapshot) {
+        //empty the previos stuff in the list
+        projListItemList = <Widget>[];
         if (snapshot.hasData) {
           String data = snapshot.data!;
           final List<dynamic> projectNameList = jsonDecode(data);
@@ -278,7 +301,7 @@ class _MyHomePageState extends State<MyHomePage> {
               color: Color(int.parse(projectNameList[i]['projectColor'])),
             ));
 
-            print(projectNameList[i]['projectColor']);
+            // print(projectNameList[i]['projectColor']);
           }
           return projectButtons(projListItemList);
         } else if (snapshot.hasError) {
