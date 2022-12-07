@@ -130,7 +130,7 @@ class _ProjectInputState extends State<ProjectInput> {
                       }
                       myData = await createProject(
                           _nameController.text,
-                          currentColor.value,
+                          pickerColor.value,
                           dateInput,
                           _controller2.text,
                           _controller3.text);

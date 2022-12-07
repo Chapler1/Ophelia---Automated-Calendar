@@ -275,10 +275,10 @@ class _MyHomePageState extends State<MyHomePage> {
             projListItemList.add(ProjListItem(
               name: (projectNameList[i])['$i'].toString() + "$i",
               route: "/showProject/$i", //NOTE2
-              color: 400,
+              color: Color(int.parse(projectNameList[i]['projectColor'])),
             ));
 
-            print(projectNameList[0]);
+            print(projectNameList[i]['projectColor']);
           }
           return projectButtons(projListItemList);
         } else if (snapshot.hasError) {
@@ -326,7 +326,7 @@ class ProjListItem extends StatelessWidget {
       child: TextButton(
         onPressed: () => context.go(route), //NOTE1
         child: Container(
-          decoration: Shadows(Colors.blue[200]),
+          decoration: Shadows(color),
           margin: const EdgeInsets.only(bottom: 10),
           height: 38,
           child: Align(
