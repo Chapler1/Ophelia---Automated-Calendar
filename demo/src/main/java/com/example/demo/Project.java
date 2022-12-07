@@ -13,7 +13,7 @@ public class Project  {
     //index of this project in the users list
     int projectIdx = 0;
     String projectName;
-    int projectColor;
+    String projectColor;
     int numSessions;
     int numHours;
     String projectNotes;
@@ -21,7 +21,7 @@ public class Project  {
     //list of days and time deltas.
     ArrayList<DateEvent> projectList = new ArrayList<DateEvent>();
 
-    public Project(LocalDate startDate, LocalDate deadline, int projectColor, String projectName, User user, int numSessions, int numHours)
+    public Project(LocalDate startDate, LocalDate deadline, String projectColor, String projectName, User user, int numSessions, int numHours)
     {
         this.startDate = startDate;
         this.deadline = deadline;
@@ -36,7 +36,7 @@ public class Project  {
     //creates a dummy project with given data.
     public Project(){
         projectName = "sample Project";
-        projectColor = 0;
+        projectColor = "0";
         LocalDate today = LocalDate.now();
         startDate = today;
         deadline = today.plusDays(10);
@@ -64,7 +64,7 @@ public class Project  {
         return projectName;
     }
 
-    public int getColor() {
+    public String getColor() {
         return projectColor;
     }
 

@@ -130,9 +130,9 @@ class _ProjectInputState extends State<ProjectInput> {
                       }
                       myData = await createProject(
                           _nameController.text,
+                          currentColor.value,
                           dateInput,
                           _controller2.text,
-                          currentColor.value,
                           _controller3.text);
                       var plannedIndex = myData.projectIndex;
                       //go to the screen with the project that was just planned.

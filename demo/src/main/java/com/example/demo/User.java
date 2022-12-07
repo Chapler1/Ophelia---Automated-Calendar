@@ -81,9 +81,9 @@ public class User {
     }
     public String getProjectNames(){
         //!! repeated code here 3x in this file basically
-        String toReturn = String.format("[{\"0\": \"%s\", \"projectColor\": \"%d\"}", projectList.get(0).getName(), projectList.get(0).getColor());
+        String toReturn = String.format("[{\"0\": \"%s\", \"projectColor\": \"%s\"}", projectList.get(0).getName(), projectList.get(0).getColor());
         for (int i = 1; i < projectList.size(); i++) {
-            toReturn += String.format(",{\"%d\": \"%s\", \"projectColor\": \"%d\"}",i, projectList.get(i).getName(),  projectList.get(i).getColor());
+            toReturn += String.format(",{\"%d\": \"%s\", \"projectColor\": \"%s\"}",i, projectList.get(i).getName(),  projectList.get(i).getColor());
         }
         toReturn += "]";
         return toReturn;

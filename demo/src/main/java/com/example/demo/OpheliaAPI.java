@@ -73,7 +73,7 @@ public class OpheliaAPI {
         ObjectMapper mapper = new ObjectMapper();
         JsonNode projectJson = mapper.readTree(message);
         String projectName = projectJson.get("projectName").textValue();
-        int projectColor = Integer.parseInt(projectJson.get("projectColor").textValue());
+        String projectColor = (projectJson.get("projectColor").textValue());
         System.out.println(projectName);
         String projectDeadline = projectJson.get("projectDeadline").textValue();
         int numSessions = Integer.parseInt(projectJson.get("numSessions").textValue());
