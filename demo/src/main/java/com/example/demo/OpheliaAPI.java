@@ -87,10 +87,13 @@ public class OpheliaAPI {
 
         Project newProj = new Project(LocalDate.now(), deadline, projectColor, projectName, exampleUser, numSessions, numHours);
         
+
+        
         System.out.println(projectJson.get("projectName"));
-        numProjects++;
+        
         newProj.setProjectIndex(numProjects);
         exampleUser.projectList.add(newProj);
+        numProjects++;
         return newProj.toString();
     }  
     

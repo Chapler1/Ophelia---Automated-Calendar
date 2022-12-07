@@ -293,8 +293,8 @@ class _MyHomePageState extends State<MyHomePage> {
         projListItemList = <Widget>[];
         if (snapshot.hasData) {
           String data = snapshot.data!;
-          print(data == "\"[noProjects]\"");
-          if (data == "\"[noProjects]\"") {
+          print(data);
+          if (data == "[\"noProjects\"]") {
             return Text('No Projects Scheduled Yet');
           }
           final List<dynamic> projectNameList = jsonDecode(data);
