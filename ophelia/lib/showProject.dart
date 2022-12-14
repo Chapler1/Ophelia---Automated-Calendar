@@ -119,6 +119,7 @@ class _ShowProjectState extends State<ShowProject> {
                     if (snapshot.hasData) {
                       var projectData = snapshot.data!;
                       List<Widget> projectList = [];
+                      var count = 0;
                       for (var item in projectData.projectDays) {
                         var curr = FractionallySizedBox(
                           widthFactor: .8,
@@ -126,18 +127,22 @@ class _ShowProjectState extends State<ShowProject> {
                             height: 20,
                             margin: const EdgeInsets.only(top: 20),
                             color: Colors.red,
-                            child: Text("${item['eventName']} ${item['date']}"),
+                            child: Text(
+                                style: TextStyle(color: Colors.white),
+                                "${item['eventName']} ${count} ${item['date']}"),
                           ),
                         );
+                        count++;
                         projectList.add(curr);
                       }
                       return Column(children: [
-                        Text(projectData.projectName),
-                        Text("${projectData.numSessions}"),
-                        Text("${projectData.numHours}"),
-                        Text("${projectData.projectNotes}"),
-                        Text("${projectData.startDate}"),
-                        Text("${projectData.endDate}"),
+                        Text("Project name: ${projectData.projectName}"),
+                        Text(
+                            "Number of times to work on project: ${projectData.numSessions}"),
+                        Text("Hours per session: ${projectData.numHours}"),
+                        Text("Project notes ${projectData.projectNotes}"),
+                        Text("Project start date: ${projectData.startDate}"),
+                        Text("Project end date: ${projectData.endDate}"),
                         ...projectList,
                       ]);
                     } else if (snapshot.hasError) {
