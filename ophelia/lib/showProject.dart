@@ -113,20 +113,39 @@ class _ShowProjectState extends State<ShowProject> {
                   onPressed: () => context.go('/'),
                   child: const Text('UNDER CONSTRUCTION SETTINGS PAGE'),
                 ),
-                SingleChildScrollView(
-                  child: FutureBuilder<String>(
-                    future: myData,
-                    builder: (context, snapshot) {
-                      if (snapshot.hasData) {
-                        return Text(snapshot.data!);
-                      } else if (snapshot.hasError) {
-                        return Text('${snapshot.error}');
+                FutureBuilder<Project>(
+                  future: myData = getProjectById(widget.id),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasData) {
+                      var projectData = snapshot.data!;
+                      List<Widget> projectList = [];
+                      for (var item in projectData.projectDays) {
+                        var curr = FractionallySizedBox(
+                          widthFactor: .8,
+                          child: Container(
+                            height: 20,
+                            margin: const EdgeInsets.only(top: 20),
+                            color: Colors.red,
+                            child: Text(item['eventName'] + " " + item["date"]),
+                          ),
+                        );
+                        projectList.add(curr);
                       }
-
-                      // By default, show a loading spinner.
-                      return const CircularProgressIndicator();
-                    },
-                  ),
+                      return Column(children: [
+                        Text(projectData.projectName),
+                        Text("${projectData.numSessions}"),
+                        Text("${projectData.numHours}"),
+                        Text("${projectData.projectNotes}"),
+                        Text("${projectData.startDate}"),
+                        Text("${projectData.endDate}"),
+                        ...projectList,
+                      ]);
+                    } else if (snapshot.hasError) {
+                      return Text('${snapshot.error}');
+                    }
+                    // By default, show a loading spinner.
+                    return const CircularProgressIndicator();
+                  },
                 ),
               ],
             ),

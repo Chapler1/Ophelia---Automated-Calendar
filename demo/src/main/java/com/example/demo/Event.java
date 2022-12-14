@@ -15,10 +15,12 @@ public class Event {
     //startTime - 430
     //endTime - 2130
     public Event(double timeDelta){
-         hasTimes = false;
-         this.timeDelta = timeDelta;
+        uniqueName+=1;
+        hasTimes = false;
+        this.timeDelta = timeDelta;
     }
     public Event(LocalTime startTime, LocalTime endTime){
+        uniqueName+=1;
         this.startTime = startTime;
         this.endTime = endTime;
 
@@ -49,7 +51,6 @@ public class Event {
 
     private static int uniqueName = 0;
     public String toString() {
-        ++uniqueName;
         if(hasTimes){
             return String.format("{\"eventName\": \"%s\", \"startTime\": %s, \"endTime\": %s, \"timeDelta\": %f}", ("project #"+uniqueName), addQuotes(startTime.toString()), addQuotes(endTime.toString()), timeDelta);
         }
