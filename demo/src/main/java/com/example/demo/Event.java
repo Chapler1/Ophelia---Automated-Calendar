@@ -58,6 +58,14 @@ public class Event {
             return String.format("{\"eventName\": \"%s\", \"timeDelta\": %f }", ("project #"+uniqueName), timeDelta);
         }
     }
+    public String toString(int index) {
+        if(hasTimes){
+            return String.format("{\"eventName\": \"%s\", \"startTime\": %s, \"endTime\": %s, \"timeDelta\": %f}", ("project #"+index), addQuotes(startTime.toString()), addQuotes(endTime.toString()), timeDelta);
+        }
+        else{
+            return String.format("{\"eventName\": \"%s\", \"timeDelta\": %f }", ("project #"+uniqueName), timeDelta);
+        }
+    }
 
     //time displacement function.
 }
