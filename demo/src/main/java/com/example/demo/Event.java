@@ -10,7 +10,7 @@ public class Event {
     LocalTime endTime;
     //number of hours elapsed of an event
     double timeDelta;
-
+    int uniqueName = 0;
     boolean hasTimes;
     //startTime - 430
     //endTime - 2130
@@ -49,7 +49,7 @@ public class Event {
         return timeDelta;
     }
 
-    private static int uniqueName = 0;
+
     public String toString() {
         if(hasTimes){
             return String.format("{\"eventName\": \"%s\", \"startTime\": %s, \"endTime\": %s, \"timeDelta\": %f}", ("project #"+uniqueName), addQuotes(startTime.toString()), addQuotes(endTime.toString()), timeDelta);
