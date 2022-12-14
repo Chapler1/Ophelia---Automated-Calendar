@@ -39,6 +39,13 @@ public class DateEvent extends Event {
         String removeBrackets = eventString.substring(0, eventString.length() - 1);
         return String.format("%s, \"date\": "+'"'+"%s"+'"'+"}",removeBrackets, date.toString());
     }
+    public String toString(int index){
+        String eventString = super.toString(index);
+//        int firstWord = eventString.indexOf(" ");
+        //removes last char from the string.
+        String removeBrackets = eventString.substring(0, eventString.length() - 1);
+        return String.format("%s, \"date\": "+'"'+"%s"+'"'+"}",removeBrackets, date.toString());
+    }
     public LocalDate getDate(){
         return date;
     }
