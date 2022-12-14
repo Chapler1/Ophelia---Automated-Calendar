@@ -126,7 +126,7 @@ class _ShowProjectState extends State<ShowProject> {
                             height: 20,
                             margin: const EdgeInsets.only(top: 20),
                             color: Colors.red,
-                            child: Text(item['eventName'] + " " + item["date"]),
+                            child: Text("${item['eventName']} ${item['date']}"),
                           ),
                         );
                         projectList.add(curr);
