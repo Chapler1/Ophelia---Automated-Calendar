@@ -124,7 +124,7 @@ public class Project  {
         String toReturn = String.format("{\"projectName\": \"%s\", \"projectColor\": %s, \"numSessions\": %s, \"numHours\": %s, \"projectNotes\": \"%s\", \"startDate\":\"%s\", \"endDate\": \"%s\", \"projectIndex\": %d, \"projectDays\": [%s",
                 projectName, projectColor, numSessions, numHours, projectNotes, startDate.toString(), deadline.toString(), projectIdx, projectList.get(1));
         for(int i = 1; i < projectList.size(); i++){
-            toReturn += String.format(",%s",projectList.get(i).toString(i));
+            toReturn += String.format(",%s",projectList.get(i).toString());
         }
         toReturn += "]}";
         return toReturn;

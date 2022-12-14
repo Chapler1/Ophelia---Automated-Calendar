@@ -52,18 +52,10 @@ public class Event {
 
     public String toString() {
         if(hasTimes){
-            return String.format("{\"eventName\": \"%s\", \"startTime\": %s, \"endTime\": %s, \"timeDelta\": %f}", ("project #"+uniqueName), addQuotes(startTime.toString()), addQuotes(endTime.toString()), timeDelta);
+            return String.format("{\"eventName\": \"%s\", \"startTime\": %s, \"endTime\": %s, \"timeDelta\": %f}", ("project"), addQuotes(startTime.toString()), addQuotes(endTime.toString()), timeDelta);
         }
         else{
-            return String.format("{\"eventName\": \"%s\", \"timeDelta\": %f }", ("project #"+uniqueName), timeDelta);
-        }
-    }
-    public String toString(int index) {
-        if(hasTimes){
-            return String.format("{\"eventName\": \"%s\", \"startTime\": %s, \"endTime\": %s, \"timeDelta\": %f}", ("project #"+index), addQuotes(startTime.toString()), addQuotes(endTime.toString()), timeDelta);
-        }
-        else{
-            return String.format("{\"eventName\": \"%s\", \"timeDelta\": %f }", ("project #"+index), timeDelta);
+            return String.format("{\"eventName\": \"%s\", \"timeDelta\": %f }", ("project"), timeDelta);
         }
     }
 
