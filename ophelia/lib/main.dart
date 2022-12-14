@@ -9,6 +9,7 @@ import 'myappbar.dart';
 import 'showProject.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'dart:collection';
 
 void main() {
   runApp(const MyApp());
@@ -73,6 +74,51 @@ final GoRouter _router = GoRouter(
   ],
 );
 
+class Event {
+  final String title;
+
+  const Event(this.title);
+
+  @override
+  String toString() => title;
+}
+
+final kToday = DateTime.now();
+final kFirstDay = DateTime(kToday.year, kToday.month - 3, kToday.day);
+final kLastDay = DateTime(kToday.year, kToday.month + 3, kToday.day);
+
+/// Example events.
+///
+/// Using a [LinkedHashMap] is highly recommended if you decide to use a map.
+final kEvents = LinkedHashMap<DateTime, List<Event>>(
+  equals: isSameDay,
+  hashCode: getHashCode,
+)..addAll(_kEventSource);
+
+final _kEventSource = Map.fromIterable(List.generate(50, (index) => index),
+    key: (item) => DateTime.utc(kFirstDay.year, kFirstDay.month, item * 5),
+    value: (item) => List.generate(
+        item % 4 + 1, (index) => Event('Event $item | ${index + 1}')))
+  ..addAll({
+    kToday: [
+      Event('Today\'s Event 1'),
+      Event('Today\'s Event 2'),
+    ],
+  });
+
+int getHashCode(DateTime key) {
+  return key.day * 1000000 + key.month * 10000 + key.year;
+}
+
+/// Returns a list of [DateTime] objects from [first] to [last], inclusive.
+List<DateTime> daysInRange(DateTime first, DateTime last) {
+  final dayCount = last.difference(first).inDays + 1;
+  return List.generate(
+    dayCount,
+    (index) => DateTime.utc(first.year, first.month, first.day + index),
+  );
+}
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -116,6 +162,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late final ValueNotifier<List<Event>> _selectedEvents;
   CalendarFormat _calendarFormat = CalendarFormat.month;
   DateTime _focusedDay = DateTime.now();
   DateTime? _selectedDay;
@@ -127,7 +174,14 @@ class _MyHomePageState extends State<MyHomePage> {
     myData = fetchNames(); //NOTE4
     // projectList = projectList(myData, true);
     super.initState();
+    _selectedDay = _focusedDay;
+    _selectedEvents = ValueNotifier(_getEventsForDay(_selectedDay!));
+
     if (widget.refresh) {}
+  }
+
+  List<Event> _getEventsForDay(DateTime day) {
+    return kEvents[day] ?? [];
   }
 
   @override
@@ -174,6 +228,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   lastDay: DateTime.utc(2030, 3, 14),
                   focusedDay: _focusedDay,
                   calendarFormat: _calendarFormat,
+                  eventLoader: _getEventsForDay,
                   selectedDayPredicate: (day) {
                     // Use `selectedDayPredicate` to determine which day is currently selected.
                     // If this returns true, then `day` will be marked as selected.
@@ -189,6 +244,7 @@ class _MyHomePageState extends State<MyHomePage> {
                         _selectedDay = selectedDay;
                         _focusedDay = focusedDay;
                       });
+                      _selectedEvents.value = _getEventsForDay(selectedDay);
                     }
                   },
                   onFormatChanged: (format) {

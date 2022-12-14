@@ -7,19 +7,20 @@
         {
             "name": "ophelia",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "flutterMode": "release"
         },
         {
             "name": "ophelia (profile mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "profile"
+            "flutterMode": "release"
         },
         {
             "name": "ophelia (release mode)",
             "request": "launch",
             "type": "dart",
-            "flutterMode": "release"
+            
         }
     ]
 }
